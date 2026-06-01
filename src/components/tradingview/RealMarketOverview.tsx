@@ -101,6 +101,7 @@ export default function RealMarketOverview() {
           })}
         </div>
       </div>
+      </div>
 
       {/* Right Side: Top Gainers/Losers */}
       <div className="w-full xl:w-[350px] bg-slate-900/80 backdrop-blur-3xl rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/80 overflow-hidden flex flex-col min-h-[500px]">
