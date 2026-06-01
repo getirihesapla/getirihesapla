@@ -16,6 +16,7 @@ import { Line } from 'react-chartjs-2';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler);
 
 import LivePriceCard from './LivePriceCard';
+import TVHotlists from './TVHotlists';
 
 const TABS = [
   { id: 'all', label: 'Tümü' },
@@ -43,7 +44,8 @@ export default function RealMarketOverview() {
   });
 
   return (
-    <div className="w-full bg-slate-900/80 backdrop-blur-3xl rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/80 overflow-hidden">
+    <div className="flex flex-col xl:flex-row gap-6">
+      <div className="flex-1 w-full bg-slate-900/80 backdrop-blur-3xl rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/80 overflow-hidden flex flex-col">
       
       {/* Live Market Status Bar */}
       <div className="bg-[#0a0f18] border-b border-slate-800 px-6 py-3 flex items-center justify-between">
@@ -97,6 +99,18 @@ export default function RealMarketOverview() {
 
             return <LivePriceCard key={asset.id} asset={asset} data={data} />;
           })}
+        </div>
+      </div>
+
+      {/* Right Side: Top Gainers/Losers */}
+      <div className="w-full xl:w-[350px] bg-slate-900/80 backdrop-blur-3xl rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/80 overflow-hidden flex flex-col min-h-[500px]">
+        <div className="bg-[#0a0f18] border-b border-slate-800 px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-amber-500 font-bold tracking-widest text-sm uppercase">Günün Yıldızları (BIST)</span>
+          </div>
+        </div>
+        <div className="flex-1 p-2">
+          <TVHotlists />
         </div>
       </div>
     </div>
