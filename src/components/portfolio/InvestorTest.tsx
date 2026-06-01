@@ -351,7 +351,7 @@ export default function InvestorTest() {
     const shareData: any = {
       title: "Yatırımcı Kişiliği Testi",
       text: `Ben bir ${PROFILES[resultProfile].title} karakteriyim! Sen de yatırımcı profilini test et.`,
-      url: "https://getirihesapla.vercel.app/portfoy-simulasyonu",
+      url: "https://korfufinance.com/portfoy-simulasyonu",
     };
     
     if (shareFile) {
@@ -373,7 +373,7 @@ export default function InvestorTest() {
       }
     } catch (err) {
       console.error("Paylaşım hatası:", err);
-      navigator.clipboard.writeText("https://getirihesapla.vercel.app/portfoy-simulasyonu");
+      navigator.clipboard.writeText("https://korfufinance.com/portfoy-simulasyonu");
       alert("Bağlantı panoya kopyalandı!");
     }
   };
@@ -501,7 +501,7 @@ export default function InvestorTest() {
               <div className="relative z-10 w-full text-center mt-auto pb-2">
                 <div className={`w-12 h-1 bg-current opacity-30 mx-auto mb-4 rounded-full ${PROFILES[resultProfile].textStyle}`} />
                 <p className={`${PROFILES[resultProfile].textStyle} opacity-70 font-bold text-[10px] tracking-widest`}>
-                  getirihesapla.vercel.app
+                  korfufinance.com
                 </p>
               </div>
             </div>
