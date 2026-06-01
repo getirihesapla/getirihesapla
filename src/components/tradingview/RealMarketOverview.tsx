@@ -107,7 +107,7 @@ export default function RealMarketOverview() {
       <div className="w-full xl:w-[350px] bg-slate-900/80 backdrop-blur-3xl rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/80 overflow-hidden flex flex-col min-h-[500px]">
         <div className="bg-[#0a0f18] border-b border-slate-800 px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-amber-500 font-bold tracking-widest text-sm uppercase">Günün Yıldızları (Tüm Varlıklar)</span>
+            <span className="text-amber-500 font-bold tracking-widest text-sm uppercase">Günün Verileri</span>
           </div>
         </div>
         <div className="flex-1 p-2">
