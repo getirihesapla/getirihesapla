@@ -669,10 +669,10 @@ export default function PortfolioPage() {
 
         {/* Tab Content: Portfolio */}
         <div ref={pdfRef} className={activeTab === "portfolio" ? "block bg-[#0b1121]" : "hidden"}>
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6">
             
             {/* Chart */}
-            <div className="lg:col-span-1 bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col">
+            <div className="lg:col-span-1 lg:min-w-[260px] bg-slate-900 border border-slate-800 rounded-2xl p-4 lg:p-5 shadow-lg flex flex-col">
               <h3 className="text-white font-bold mb-4 flex items-center justify-between">
                 <span>Varlık Dağılımı</span>
                 <span className="text-xs font-normal text-slate-400">{portfolio.length} Kalem</span>
@@ -687,24 +687,24 @@ export default function PortfolioPage() {
             </div>
 
             {/* Table */}
-            <div className="lg:col-span-3 bg-slate-900 border border-slate-800 rounded-2xl shadow-lg overflow-hidden flex flex-col">
+            <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl shadow-lg overflow-hidden flex flex-col">
               <div className="overflow-x-auto flex-1">
                 <table className="w-full text-left text-sm whitespace-nowrap">
                   <thead className="bg-slate-800/50 text-slate-400 border-b border-slate-800">
                     <tr>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs">Varlık</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">Fiyat</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">24S Değişim</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">Ort. Maliyet</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">Miktar</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">Toplam Değer</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-right">Kâr/Zarar</th>
-                      <th className="px-5 py-4 font-semibold uppercase tracking-wider text-xs text-center">Trend</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs">Varlık</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Fiyat</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">24S Değişim</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Ort. Maliyet</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Miktar</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Toplam Değer</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Kâr/Zarar</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-center">Trend</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/50">
                     {portfolio.length === 0 ? (
-                      <tr><td colSpan={8} className="px-5 py-10 text-center text-slate-500">Açık pozisyon bulunmuyor.</td></tr>
+                      <tr><td colSpan={8} className="px-3 py-10 text-center text-slate-500">Açık pozisyon bulunmuyor.</td></tr>
                     ) : (
                       portfolio.map(asset => {
                         const data = getPriceData(asset);
@@ -716,8 +716,8 @@ export default function PortfolioPage() {
 
                         return (
                           <tr key={asset.id} className="hover:bg-slate-800/30 transition-colors group">
-                            <td className="px-5 py-4">
-                              <div className="flex items-center gap-3">
+                            <td className="px-2 lg:px-3 py-3">
+                              <div className="flex items-center gap-2">
                                 <button 
                                   onClick={() => handleDeleteAsset(asset.id, "portfolio")}
                                   className="text-slate-500 hover:text-red-500 transition-colors p-1.5 rounded-lg hover:bg-red-500/10"
@@ -725,42 +725,42 @@ export default function PortfolioPage() {
                                 >
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
-                                <div className={`w-2 h-2 rounded-full ${isProfit ? 'bg-emerald-500' : 'bg-red-500'} shadow-[0_0_8px_currentColor]`}></div>
-                                <div>
-                                  <div className="font-bold text-white tracking-wide">{asset.symbol}</div>
-                                  <div className="text-xs text-slate-500">{asset.name}</div>
+                                <div className={`w-2 h-2 rounded-full ${isProfit ? 'bg-emerald-500' : 'bg-red-500'} shadow-[0_0_8px_currentColor] shrink-0`}></div>
+                                <div className="min-w-0">
+                                  <div className="font-bold text-white tracking-wide text-xs md:text-sm truncate">{asset.symbol}</div>
+                                  <div className="text-[10px] text-slate-500 truncate hidden sm:block">{asset.name}</div>
                                 </div>
-                                <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full border border-slate-700 text-slate-400 bg-slate-800/50">
+                                <span className="ml-1 text-[9px] md:text-[10px] px-1.5 py-0.5 rounded border border-slate-700 text-slate-400 bg-slate-800/50 whitespace-nowrap">
                                   {asset.type}
                                 </span>
                               </div>
                             </td>
-                            <td className="px-5 py-4 text-right font-mono text-slate-200">
+                            <td className="px-2 lg:px-3 py-3 text-right font-mono text-slate-200 text-xs md:text-sm">
                               {formatCurrency(data.price, asset.currency)}
                             </td>
-                            <td className="px-5 py-4 text-right">
+                            <td className="px-2 lg:px-3 py-3 text-right text-xs md:text-sm">
                               <div className={`font-medium ${isDailyPos ? 'text-emerald-400' : 'text-red-400'}`}>
                                 {isDailyPos ? '+' : ''}{data.changePct.toFixed(2)}%
                               </div>
                             </td>
-                            <td className="px-5 py-4 text-right font-mono text-slate-400">
+                            <td className="px-2 lg:px-3 py-3 text-right font-mono text-slate-400 text-xs md:text-sm">
                               {formatCurrency(asset.avgPrice, asset.currency)}
                             </td>
-                            <td className="px-5 py-4 text-right font-mono text-slate-200">
+                            <td className="px-2 lg:px-3 py-3 text-right font-mono text-slate-200 text-xs md:text-sm">
                               {asset.amount}
                             </td>
-                            <td className="px-5 py-4 text-right font-mono font-bold text-white">
+                            <td className="px-2 lg:px-3 py-3 text-right font-mono font-bold text-white text-xs md:text-sm">
                               {formatCurrency(asset.amount * data.price, asset.currency)}
                             </td>
-                            <td className="px-5 py-4 text-right">
-                              <div className={`font-bold font-mono ${isProfit ? 'text-emerald-400' : 'text-red-400'}`}>
+                            <td className="px-2 lg:px-3 py-3 text-right">
+                              <div className={`font-bold font-mono text-xs md:text-sm ${isProfit ? 'text-emerald-400' : 'text-red-400'}`}>
                                 {isProfit ? '+' : ''}{formatCurrency(profit, asset.currency)}
                               </div>
-                              <div className={`text-xs ${isProfit ? 'text-emerald-500/70' : 'text-red-500/70'}`}>
+                              <div className={`text-[10px] md:text-xs ${isProfit ? 'text-emerald-500/70' : 'text-red-500/70'}`}>
                                 {isProfit ? '▲' : '▼'} {profitPct.toFixed(2)}%
                               </div>
                             </td>
-                            <td className="px-5 py-4 flex justify-center">
+                            <td className="px-2 lg:px-3 py-3 flex justify-center">
                               <Sparkline isPositive={isDailyPos} />
                             </td>
                           </tr>
