@@ -669,10 +669,10 @@ export default function PortfolioPage() {
 
         {/* Tab Content: Portfolio */}
         <div ref={pdfRef} className={activeTab === "portfolio" ? "block bg-[#0b1121]" : "hidden"}>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-6">
+          <div className="flex flex-col lg:flex-row gap-5">
             
             {/* Chart */}
-            <div className="lg:col-span-1 lg:min-w-[260px] bg-slate-900 border border-slate-800 rounded-2xl p-4 lg:p-5 shadow-lg flex flex-col">
+            <div className="w-full lg:w-[22%] shrink-0 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-lg flex flex-col">
               <h3 className="text-white font-bold mb-4 flex items-center justify-between">
                 <span>Varlık Dağılımı</span>
                 <span className="text-xs font-normal text-slate-400">{portfolio.length} Kalem</span>
@@ -687,8 +687,8 @@ export default function PortfolioPage() {
             </div>
 
             {/* Table */}
-            <div className="lg:col-span-4 bg-slate-900 border border-slate-800 rounded-2xl shadow-lg overflow-hidden flex flex-col">
-              <div className="overflow-x-auto flex-1">
+            <div className="w-full lg:w-[78%] bg-slate-900 border border-slate-800 rounded-2xl shadow-lg overflow-hidden flex flex-col min-w-0">
+              <div className="flex-1 overflow-x-auto">
                 <table className="w-full text-left text-sm whitespace-nowrap">
                   <thead className="bg-slate-800/50 text-slate-400 border-b border-slate-800">
                     <tr>
