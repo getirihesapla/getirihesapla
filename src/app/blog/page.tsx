@@ -4,7 +4,7 @@ import { getAllPosts } from "@/data/posts";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog & Analiz | Korfu Finance",
+  title: "Blog & Eğitimler | Korfu Finance",
   description: "Bloomberg standartlarında finans, kripto ve ekonomi dünyasından en güncel analizler, yatırım stratejileri ve piyasa yorumları.",
 };
 
@@ -24,7 +24,7 @@ export default function BlogIndexPage() {
           <div>
             <h1 className="text-4xl font-serif font-bold text-white flex items-center gap-3">
               <span className="w-2 h-10 bg-indigo-600 rounded-full inline-block"></span>
-              Korfu Araştırma & Analiz
+              Korfu Blog & Eğitimler
             </h1>
             <p className="text-slate-400 mt-3 text-lg max-w-2xl">
               Profesyonel yatırım stratejileri, küresel ekonomi değerlendirmeleri ve veri odaklı piyasa analizleri.
