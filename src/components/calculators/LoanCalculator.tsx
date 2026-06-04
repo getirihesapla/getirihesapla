@@ -132,15 +132,7 @@ export default function LoanCalculator() {
 
   return (
     <div className="w-full">
-      {/* Dynamic Header */}
-      <header className="mb-12 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
-          Kredi / Anüite <span className="text-amber-600">Hesaplama</span>
-        </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
-          Aylık taksit, faiz, yasal vergiler ve toplam ödeme tutarınızı görmek için kredi hesaplama aracını kullanın.
-        </p>
-      </header>
+      {/* Removed massive header to match grid compactness */}
 
       <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
         
@@ -185,29 +177,42 @@ export default function LoanCalculator() {
           
           <h2 className="text-xl font-bold text-slate-800 dark:text-white">Lütfen kredi bilgilerinizi girin.</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Amount */}
-            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-              <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">Kredi Tutarı (TL)</label>
-              <input 
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full text-center bg-transparent text-4xl md:text-5xl font-light text-slate-900 dark:text-white focus:outline-none placeholder-slate-300"
-                placeholder="0"
-              />
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Kredi Tutarı (TL)</label>
+              <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-amber-500">
+                <input 
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium"
+                  placeholder="0"
+                />
+                <div className="flex border-l border-slate-200 dark:border-slate-700 h-full">
+                  <button onClick={() => setAmount(String(Math.max(0, Number(amount) - 10000)))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors font-bold">-</button>
+                  <button onClick={() => setAmount(String(Number(amount) + 10000))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 transition-colors font-bold">+</button>
+                </div>
+              </div>
             </div>
 
             {/* Rate */}
-            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
-              <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">Aylık faiz oranı (%)</label>
-              <input 
-                type="number"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
-                className="w-full text-center bg-transparent text-4xl md:text-5xl font-light text-slate-900 dark:text-white focus:outline-none placeholder-slate-300"
-                placeholder="0"
-              />
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Aylık faiz oranı (%)</label>
+              <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-amber-500">
+                <input 
+                  type="number"
+                  step="0.01"
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                  className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium"
+                  placeholder="0.00"
+                />
+                <div className="flex border-l border-slate-200 dark:border-slate-700 h-full">
+                  <button onClick={() => setRate((Math.max(0, Number(rate) - 0.1)).toFixed(2))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors font-bold">-</button>
+                  <button onClick={() => setRate((Number(rate) + 0.1).toFixed(2))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 transition-colors font-bold">+</button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -224,14 +229,13 @@ export default function LoanCalculator() {
           )}
 
           {/* Slider */}
-          <div className="bg-slate-50 dark:bg-slate-800/50 p-8 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-6">Vade sayısı (ay)</label>
-            <div className="text-center mb-8">
-              <span className="text-5xl font-medium text-slate-900 dark:text-white">{term}</span>
-              <span className="text-2xl text-slate-500 ml-2">ay</span>
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between items-center mb-4">
+              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Vade sayısı (ay)</label>
+              <span className="text-xl font-bold text-slate-900 dark:text-white">{term} ay</span>
             </div>
             
-            <div className="px-4">
+            <div className="px-2">
               <input 
                 type="range" 
                 min="1" 
@@ -241,8 +245,8 @@ export default function LoanCalculator() {
                 className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-amber-600"
               />
               <div className="flex justify-between text-xs text-slate-400 mt-2 font-medium">
-                <span>1 ay</span>
-                <span>{maxTerm} ay</span>
+                <span>1</span>
+                <span>{maxTerm}</span>
               </div>
             </div>
           </div>
@@ -275,25 +279,25 @@ export default function LoanCalculator() {
 
               <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Amortisman (Ödeme) Planı</h3>
               
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
-                  <thead className="text-xs uppercase bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-300">
+              <div className="max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400 relative">
+                  <thead className="text-xs uppercase bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-300 sticky top-0 z-10 shadow-sm">
                     <tr>
-                      <th className="px-6 py-4 rounded-tl-xl">Ay</th>
-                      <th className="px-6 py-4">Taksit</th>
-                      <th className="px-6 py-4">Anapara</th>
-                      <th className="px-6 py-4">Faiz & Vergi</th>
-                      <th className="px-6 py-4 rounded-tr-xl">Kalan Borç</th>
+                      <th className="px-3 py-2 rounded-tl-lg">Ay</th>
+                      <th className="px-3 py-2">Taksit</th>
+                      <th className="px-3 py-2">Anapara</th>
+                      <th className="px-3 py-2">Faiz/Vergi</th>
+                      <th className="px-3 py-2 rounded-tr-lg">Borç</th>
                     </tr>
                   </thead>
                   <tbody>
                     {result.schedule.map((row) => (
                       <tr key={row.month} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{row.month}</td>
-                        <td className="px-6 py-4 font-medium text-amber-600 dark:text-amber-500">{formatCurrency(row.installment)}</td>
-                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{formatCurrency(row.principalPayment)}</td>
-                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{formatCurrency(row.interestPayment + row.taxPayment)}</td>
-                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{formatCurrency(row.remainingBalance)}</td>
+                        <td className="px-3 py-1.5 font-bold text-slate-900 dark:text-white">{row.month}</td>
+                        <td className="px-3 py-1.5 font-medium text-amber-600 dark:text-amber-500">{formatCurrency(row.installment)}</td>
+                        <td className="px-3 py-1.5 text-slate-700 dark:text-slate-300">{formatCurrency(row.principalPayment)}</td>
+                        <td className="px-3 py-1.5 text-slate-700 dark:text-slate-300">{formatCurrency(row.interestPayment + row.taxPayment)}</td>
+                        <td className="px-3 py-1.5 font-medium text-slate-900 dark:text-white">{formatCurrency(row.remainingBalance)}</td>
                       </tr>
                     ))}
                   </tbody>
