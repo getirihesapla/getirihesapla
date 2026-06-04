@@ -136,7 +136,7 @@ export default function LoanCalculator() {
       {/* Dynamic Header */}
       <header className="mb-12 text-center md:text-left">
         <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
-          Kredi <span className="text-amber-600">Hesaplama</span>
+          Kredi / Anüite <span className="text-amber-600">Hesaplama</span>
         </h1>
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
           Aylık taksit, faiz, yasal vergiler ve toplam ödeme tutarınızı görmek için kredi hesaplama aracını kullanın.
