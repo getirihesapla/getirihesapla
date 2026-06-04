@@ -97,7 +97,6 @@ export default function AlertsPage() {
           });
           
           setLivePrices(prev => ({ ...prev, ...priceMap }));
-          evaluateAlerts(priceMap);
         }
       } catch (err) {
         console.error("Fiyatlar güncellenemedi", err);
@@ -126,65 +125,7 @@ export default function AlertsPage() {
     }
   };
 
-  const evaluateAlerts = async (prices: Record<string, number>) => {
-    for (const alert of alerts) {
-      if (!alert.isActive || alert.isTriggered) continue;
 
-      const currentPrice = prices[alert.symbol];
-      if (!currentPrice) continue;
-
-      let triggered = false;
-      let msg = "";
-
-      switch (alert.condition) {
-        case "greater":
-          if (currentPrice >= alert.targetValue) {
-            triggered = true;
-            msg = `${alert.symbol} belirlediğiniz ${alert.targetValue} hedefini aştı! (Güncel: ${currentPrice})`;
-          }
-          break;
-        case "less":
-          if (currentPrice <= alert.targetValue) {
-            triggered = true;
-            msg = `${alert.symbol} belirlediğiniz ${alert.targetValue} seviyesinin altına indi! (Güncel: ${currentPrice})`;
-          }
-          break;
-        case "percent_up":
-          if (alert.basePrice) {
-            const target = alert.basePrice * (1 + (alert.targetValue / 100));
-            if (currentPrice >= target) {
-              triggered = true;
-              msg = `${alert.symbol} %${alert.targetValue} değer kazandı!`;
-            }
-          }
-          break;
-        case "percent_down":
-          if (alert.basePrice) {
-            const target = alert.basePrice * (1 - (alert.targetValue / 100));
-            if (currentPrice <= target) {
-              triggered = true;
-              msg = `${alert.symbol} %${alert.targetValue} değer kaybetti!`;
-            }
-          }
-          break;
-      }
-
-      if (triggered && user) {
-        // Update DB
-        try {
-          await updateDoc(doc(db, "users", user.uid, "alerts", alert.id), {
-            isTriggered: true,
-            isActive: false,
-          });
-          
-          showToast(msg, 'success');
-          sendPushNotification("🚨 Fiyat Alarmı Tetiklendi", msg);
-        } catch (err) {
-          console.error("Alarm güncellenemedi", err);
-        }
-      }
-    }
-  };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;

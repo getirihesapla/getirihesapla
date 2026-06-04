@@ -7,6 +7,7 @@ import { doc, getDoc } from "firebase/firestore";
 import jsPDF from "jspdf";
 import { toPng } from "html-to-image";
 import { useMobileMenu } from "@/context/MobileMenuContext";
+import NotificationSystem from "./NotificationSystem";
 
 export default function Header() {
   const [user, setUser] = useState<User | null>(null);
@@ -190,6 +191,7 @@ export default function Header() {
           </div>
         ) : (
           <div className="flex items-center gap-3">
+            <NotificationSystem />
             <div className="flex flex-col items-end hidden sm:flex">
               <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">{user.displayName || user.email?.split('@')[0]}</span>
               <button onClick={handleLogout} className="text-xs text-slate-500 hover:text-red-500 transition-colors">
