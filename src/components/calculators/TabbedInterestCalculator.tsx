@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { formatCurrency } from "./shared";
 
 type TabType = "basit" | "bilesik" | "vadeli";
-type RateType = "yillik" | "aylik";
+type RateType = "yillik" | "aylik" | "gunluk";
 type TermType = "gun" | "ay" | "yil";
 type FrequencyType = "gunluk" | "aylik" | "ucaylik" | "altiaylik" | "yillik";
 
@@ -30,7 +30,15 @@ export default function TabbedInterestCalculator() {
     const tInput = parseFloat(termValue);
 
     // Normalize rate to annual
-    const rAnnual = rateType === "yillik" ? rInput / 100 : (rInput * 12) / 100;
+    let rAnnual = 0;
+    if (activeTab === "basit") {
+      if (rateType === "yillik") rAnnual = rInput / 100;
+      else if (rateType === "aylik") rAnnual = (rInput * 12) / 100;
+      else if (rateType === "gunluk") rAnnual = (rInput * 365) / 100;
+    } else {
+      // Bileşik ve Vadeli sadece yıllık faiz oranı kullanır
+      rAnnual = rInput / 100;
+    }
     
     // Normalize time to years
     let tYears = 0;
@@ -72,8 +80,8 @@ export default function TabbedInterestCalculator() {
       // So Vadeli Mevduat here is basically the same as Simple Interest. I will calculate it identically based on their formula:
       // Faiz = Anapara * Faiz Oranı * VadeSuresi(Gün) / 36500 (since rate is in % and time in days)
       
-      const r = rateType === "yillik" ? rInput : rInput * 12;
-      calculatedInterest = (P * r * tDays) / 36500;
+      // Vadeli Mevduat: Sadece yıllık faiz
+      calculatedInterest = (P * rInput * tDays) / 36500;
       calculatedTotal = P + calculatedInterest;
     }
 
@@ -86,6 +94,9 @@ export default function TabbedInterestCalculator() {
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     setResult(null);
+    if (tab !== "basit") {
+      setRateType("yillik");
+    }
   };
 
   return (
@@ -158,12 +169,20 @@ export default function TabbedInterestCalculator() {
             <div className="flex items-center gap-3">
               <div className="relative w-2/5">
                 <select
-                  value={rateType}
+                  value={activeTab === "basit" ? rateType : "yillik"}
                   onChange={(e) => setRateType(e.target.value as RateType)}
-                  className="w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-700 font-medium cursor-pointer"
+                  disabled={activeTab !== "basit"}
+                  className={`w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] font-medium ${activeTab !== "basit" ? "text-slate-500 bg-slate-50" : "text-slate-700 cursor-pointer"}`}
                 >
-                  <option value="yillik">Yıllık</option>
-                  <option value="aylik">Aylık</option>
+                  {activeTab === "basit" ? (
+                    <>
+                      <option value="yillik">Yıllık</option>
+                      <option value="aylik">Aylık</option>
+                      <option value="gunluk">Günlük</option>
+                    </>
+                  ) : (
+                    <option value="yillik">Yıllık</option>
+                  )}
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#4f46e5]">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
