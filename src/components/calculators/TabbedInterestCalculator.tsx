@@ -121,8 +121,8 @@ export default function TabbedInterestCalculator() {
           onClick={() => handleTabChange("basit")}
           className={`px-6 py-3 rounded-xl font-bold transition-all ${
             activeTab === "basit" 
-              ? "bg-[#4f46e5] text-white shadow-md shadow-indigo-500/20" 
-              : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+              ? "bg-slate-900 dark:bg-amber-600 text-white shadow-md shadow-slate-900/20 dark:shadow-amber-600/20" 
+              : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
           }`}
         >
           Basit Faiz
@@ -131,8 +131,8 @@ export default function TabbedInterestCalculator() {
           onClick={() => handleTabChange("bilesik")}
           className={`px-6 py-3 rounded-xl font-bold transition-all ${
             activeTab === "bilesik" 
-              ? "bg-[#4f46e5] text-white shadow-md shadow-indigo-500/20" 
-              : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+              ? "bg-slate-900 dark:bg-amber-600 text-white shadow-md shadow-slate-900/20 dark:shadow-amber-600/20" 
+              : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
           }`}
         >
           Bileşik Faiz
@@ -141,8 +141,8 @@ export default function TabbedInterestCalculator() {
           onClick={() => handleTabChange("vadeli")}
           className={`px-6 py-3 rounded-xl font-bold transition-all ${
             activeTab === "vadeli" 
-              ? "bg-[#4f46e5] text-white shadow-md shadow-indigo-500/20" 
-              : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+              ? "bg-slate-900 dark:bg-amber-600 text-white shadow-md shadow-slate-900/20 dark:shadow-amber-600/20" 
+              : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700"
           }`}
         >
           Vadeli Mevduat Faizi
@@ -161,7 +161,7 @@ export default function TabbedInterestCalculator() {
                 <select
                   value={frequency}
                   onChange={(e) => setFrequency(e.target.value as FrequencyType)}
-                  className="w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-700 font-medium cursor-pointer"
+                  className="w-full appearance-none px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-700 dark:text-slate-200 font-medium cursor-pointer"
                 >
                   <option value="gunluk">Günlük</option>
                   <option value="aylik">Aylık</option>
@@ -169,7 +169,7 @@ export default function TabbedInterestCalculator() {
                   <option value="altiaylik">6 Aylık</option>
                   <option value="yillik">Yıllık</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#4f46e5]">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500 dark:text-amber-500">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function TabbedInterestCalculator() {
                 <select
                   value={activeTab === "basit" ? rateType : "yillik"}
                   onChange={(e) => setRateType(e.target.value as RateType)}
-                  className="w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-700 font-medium cursor-pointer"
+                  className="w-full appearance-none px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-700 dark:text-slate-200 font-medium cursor-pointer"
                 >
                   {activeTab === "basit" ? (
                     <>
@@ -196,7 +196,7 @@ export default function TabbedInterestCalculator() {
                     <option value="yillik">Yıllık</option>
                   )}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#4f46e5]">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500 dark:text-amber-500">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
               </div>
@@ -205,7 +205,7 @@ export default function TabbedInterestCalculator() {
                 type="number"
                 value={rate}
                 onChange={(e) => setRate(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-800 font-medium"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
               />
             </div>
           </div>
@@ -218,10 +218,10 @@ export default function TabbedInterestCalculator() {
                 type="number"
                 value={capital}
                 onChange={(e) => setCapital(e.target.value)}
-                className="w-full px-4 py-3 bg-[#f1f5f9] border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-800 font-medium"
+                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
-                <span className="text-slate-800 font-bold">TL</span>
+                <span className="text-slate-800 dark:text-slate-400 font-bold">TL</span>
               </div>
             </div>
           </div>
@@ -234,19 +234,19 @@ export default function TabbedInterestCalculator() {
                 type="number"
                 value={termValue}
                 onChange={(e) => setTermValue(e.target.value)}
-                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-800 font-medium"
+                className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
               />
               <div className="relative w-2/5">
                 <select
                   value={termType}
                   onChange={(e) => setTermType(e.target.value as TermType)}
-                  className="w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-700 font-medium cursor-pointer"
+                  className="w-full appearance-none px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-700 dark:text-slate-200 font-medium cursor-pointer"
                 >
                   <option value="gun">Gün</option>
                   <option value="ay">Ay</option>
                   <option value="yil">Yıl</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#4f46e5]">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500 dark:text-amber-500">
                   <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
               </div>
@@ -256,7 +256,7 @@ export default function TabbedInterestCalculator() {
           <div className="pt-4">
             <button 
               onClick={calculate}
-              className="w-full py-4 bg-[#4f46e5] text-white rounded-xl font-bold text-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-500/30"
+              className="w-full py-4 bg-slate-900 dark:bg-amber-600 text-white rounded-xl font-bold text-lg hover:bg-slate-800 dark:hover:bg-amber-700 transition-colors shadow-lg shadow-slate-900/20 dark:shadow-amber-600/20"
             >
               Faiz Hesapla
             </button>
@@ -266,17 +266,17 @@ export default function TabbedInterestCalculator() {
             <div className="mt-8 p-6 bg-white border border-slate-200 rounded-2xl shadow-sm animate-in fade-in slide-in-from-bottom-4">
               <h3 className="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-4 text-center">Hesaplama Sonucu</h3>
               <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                  <span className="text-slate-600 font-medium">Anapara:</span>
-                  <span className="text-slate-900 font-bold">{formatCurrency(parseFloat(capital))}</span>
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">Anapara:</span>
+                  <span className="text-slate-900 dark:text-white font-bold">{formatCurrency(parseFloat(capital))}</span>
                 </div>
-                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                  <span className="text-slate-600 font-medium">Kazanılan Faiz:</span>
-                  <span className="text-emerald-600 font-bold">+{formatCurrency(result.interest)}</span>
+                <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">Kazanılan Faiz:</span>
+                  <span className="text-emerald-600 dark:text-emerald-500 font-bold">+{formatCurrency(result.interest)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-slate-900 font-bold text-lg">Toplam:</span>
-                  <span className="text-[#4f46e5] font-black text-2xl">{formatCurrency(result.total)}</span>
+                  <span className="text-slate-900 dark:text-white font-bold text-lg">Toplam:</span>
+                  <span className="text-amber-600 dark:text-amber-500 font-black text-2xl">{formatCurrency(result.total)}</span>
                 </div>
               </div>
             </div>
