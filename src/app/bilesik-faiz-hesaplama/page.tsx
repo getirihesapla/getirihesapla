@@ -81,18 +81,8 @@ export default function BilesikFaizPage() {
           <span className="text-amber-600">Faiz Hesaplama Araçları</span>
         </nav>
 
-        {/* 4. Header & Intro */}
-        <header className="mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
-            Faiz Hesaplama <span className="text-[#4f46e5]">Araçları</span>
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-            Aşağıdaki sekmeleri kullanarak Basit Faiz, Bileşik Faiz ve Vadeli Mevduat getirilerinizi kolayca hesaplayın.
-          </p>
-        </header>
-
-        {/* 5. Tool Section (Lazy loaded / Client Component) */}
-        <div className="mb-16">
+        {/* 4. Header & Intro (Moved to TabbedInterestCalculator) */}
+        <div className="mb-8">
            <TabbedInterestCalculator />
         </div>
 

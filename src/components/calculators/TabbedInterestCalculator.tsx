@@ -100,7 +100,20 @@ export default function TabbedInterestCalculator() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="w-full">
+      {/* Dynamic Header */}
+      <header className="mb-12 text-center md:text-left">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+          {activeTab === "basit" && "Basit Faiz Hesaplama"}
+          {activeTab === "bilesik" && "Bileşik Faiz Hesaplama"}
+          {activeTab === "vadeli" && "Vadeli Mevduat Faizi Hesaplama"}
+        </h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
+          Aşağıdaki sekmeleri kullanarak faiz ve vade bilgilerinizi girin, yatırımınızın getirisini kolayca hesaplayın.
+        </p>
+      </header>
+
+      <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
       
       {/* Tabs */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 p-6 bg-white border-b border-slate-50">
@@ -171,8 +184,7 @@ export default function TabbedInterestCalculator() {
                 <select
                   value={activeTab === "basit" ? rateType : "yillik"}
                   onChange={(e) => setRateType(e.target.value as RateType)}
-                  disabled={activeTab !== "basit"}
-                  className={`w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] font-medium ${activeTab !== "basit" ? "text-slate-500 bg-slate-50" : "text-slate-700 cursor-pointer"}`}
+                  className="w-full appearance-none px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4f46e5] text-slate-700 font-medium cursor-pointer"
                 >
                   {activeTab === "basit" ? (
                     <>
