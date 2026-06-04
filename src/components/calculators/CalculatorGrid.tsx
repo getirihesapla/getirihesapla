@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import CompoundInterest from "./CompoundInterest";
+import UnifiedInterestCalculator from "./UnifiedInterestCalculator";
 import LoanCalculator from "./LoanCalculator";
 import GordonGrowth from "./GordonGrowth";
 import RealReturn from "./RealReturn";
@@ -11,7 +11,7 @@ import BondValuation from "./BondValuation";
 export default function CalculatorGrid() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <CompoundInterest />
+      <UnifiedInterestCalculator />
       <LoanCalculator />
       <GordonGrowth />
       <RealReturn />

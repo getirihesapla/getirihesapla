@@ -1,19 +1,19 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import CompoundInterest from "@/components/calculators/CompoundInterest";
+import UnifiedInterestCalculator from "@/components/calculators/UnifiedInterestCalculator";
 
 // 1. Dynamic Metadata & SEO
 export const metadata: Metadata = {
-  title: "Bileşik Faiz Hesaplama | Korfu Finance",
-  description: "En güncel oranlarla bileşik faiz getirisi hesaplayın. Aylık ve yıllık yatırım stratejileriniz için profesyonel bileşik faiz hesaplama aracı.",
+  title: "Faiz Karşılaştırma Motoru | Korfu Finance",
+  description: "Basit faiz, bileşik faiz ve vadeli mevduat getirilerini eşzamanlı olarak karşılaştırın.",
   keywords: "bileşik faiz, bileşik faiz hesaplama, mevduat getirisi, yatırım hesaplama, faiz hesaplama aracı, korfu finance",
   alternates: {
     canonical: "https://www.korfufinance.com/bilesik-faiz-hesaplama",
   },
   openGraph: {
-    title: "Bileşik Faiz Hesaplama | Korfu Finance",
-    description: "En güncel oranlarla bileşik faiz getirisi hesaplayın. Aylık ve yıllık yatırım stratejileriniz için profesyonel bileşik faiz hesaplama aracı.",
+    title: "Faiz Karşılaştırma Motoru | Korfu Finance",
+    description: "Basit faiz, bileşik faiz ve vadeli mevduat getirilerini eşzamanlı olarak karşılaştırın.",
     url: "https://www.korfufinance.com/bilesik-faiz-hesaplama",
     siteName: "Korfu Finance",
     images: [
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bileşik Faiz Hesaplama | Korfu Finance",
-    description: "Aylık ve yıllık yatırım stratejileriniz için profesyonel bileşik faiz hesaplama aracı.",
+    title: "Faiz Karşılaştırma Motoru | Korfu Finance",
+    description: "Basit faiz, bileşik faiz ve vadeli mevduat getirilerini eşzamanlı olarak karşılaştırın.",
   },
 };
 
@@ -40,8 +40,8 @@ export default function BilesikFaizPage() {
     "@graph": [
       {
         "@type": "WebPage",
-        "name": "Bileşik Faiz Hesaplama",
-        "description": "En güncel oranlarla bileşik faiz getirisi hesaplama aracı.",
+        "name": "Faiz Karşılaştırma Motoru",
+        "description": "Basit, bileşik ve vadeli mevduat getirilerini karşılaştırma aracı.",
         "url": "https://www.korfufinance.com/bilesik-faiz-hesaplama",
       },
       {
@@ -78,22 +78,22 @@ export default function BilesikFaizPage() {
         <nav aria-label="breadcrumb" className="text-xs font-semibold text-slate-500 mb-8 uppercase tracking-widest flex items-center gap-2">
           <Link href="/" className="hover:text-amber-600 transition-colors">Ana Sayfa</Link>
           <span>/</span>
-          <span className="text-amber-600">Bileşik Faiz Hesaplama</span>
+          <span className="text-amber-600">Faiz Karşılaştırma Motoru</span>
         </nav>
 
         {/* 4. Header & Intro */}
         <header className="mb-12">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
-            Bileşik Faiz <span className="text-amber-600">Hesaplama</span>
+            Faiz <span className="text-amber-600">Karşılaştırma Motoru</span>
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-            Yatırımlarınızın zaman içindeki büyümesini Korfu Finance'in profesyonel algoritmasıyla hesaplayın. Albert Einstein'ın "Dünyanın 8. harikası" olarak adlandırdığı bileşik faizin portföyünüze olan etkisini anında görün.
+            Yatırımlarınızın zaman içindeki büyümesini Korfu Finance'in profesyonel algoritmasıyla hesaplayın. Basit faiz, bileşik faiz ve net vadeli mevduat getirilerini aynı anda kıyaslayarak en avantajlı stratejiyi belirleyin.
           </p>
         </header>
 
         {/* 5. Tool Section (Lazy loaded / Client Component) */}
         <div className="mb-16">
-           <CompoundInterest />
+           <UnifiedInterestCalculator />
         </div>
 
         {/* 6. İçerik Blokları & Bilgi Kartları */}
