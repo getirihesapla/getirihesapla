@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
-import UnifiedInterestCalculator from "@/components/calculators/UnifiedInterestCalculator";
+import TabbedInterestCalculator from "@/components/calculators/TabbedInterestCalculator";
 
 // 1. Dynamic Metadata & SEO
 export const metadata: Metadata = {
@@ -78,22 +78,22 @@ export default function BilesikFaizPage() {
         <nav aria-label="breadcrumb" className="text-xs font-semibold text-slate-500 mb-8 uppercase tracking-widest flex items-center gap-2">
           <Link href="/" className="hover:text-amber-600 transition-colors">Ana Sayfa</Link>
           <span>/</span>
-          <span className="text-amber-600">Faiz Karşılaştırma Motoru</span>
+          <span className="text-amber-600">Faiz Hesaplama Araçları</span>
         </nav>
 
         {/* 4. Header & Intro */}
         <header className="mb-12">
           <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
-            Faiz <span className="text-amber-600">Karşılaştırma Motoru</span>
+            Faiz Hesaplama <span className="text-[#4f46e5]">Araçları</span>
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed">
-            Yatırımlarınızın zaman içindeki büyümesini Korfu Finance'in profesyonel algoritmasıyla hesaplayın. Basit faiz, bileşik faiz ve net vadeli mevduat getirilerini aynı anda kıyaslayarak en avantajlı stratejiyi belirleyin.
+            Aşağıdaki sekmeleri kullanarak Basit Faiz, Bileşik Faiz ve Vadeli Mevduat getirilerinizi kolayca hesaplayın.
           </p>
         </header>
 
         {/* 5. Tool Section (Lazy loaded / Client Component) */}
         <div className="mb-16">
-           <UnifiedInterestCalculator />
+           <TabbedInterestCalculator />
         </div>
 
         {/* 6. İçerik Blokları & Bilgi Kartları */}
@@ -122,34 +122,46 @@ export default function BilesikFaizPage() {
         </section>
 
         {/* 7. Açıklayıcı İçerik ve Rehber (SEO Content) */}
-        <section className="prose prose-lg dark:prose-invert max-w-none mb-16">
-          <h2 className="text-3xl font-serif font-bold text-slate-900 dark:text-white border-b border-slate-200 dark:border-slate-800 pb-3 mb-6">
-            Bileşik Faiz Nedir ve Neden Önemlidir?
-          </h2>
-          <p>
-            Bileşik faiz, basit faizden farklı olarak sadece anapara üzerinden değil, daha önceki dönemlerde kazanılmış olan faizlerin de anaparaya eklenmesiyle elde edilen faizdir. Bu özellik, yatırımlarınızın zaman içinde eksponansiyel (katlanarak) büyümesini sağlar. Finansal okuryazarlığın temel taşlarından biridir.
-          </p>
+        <section className="prose prose-lg dark:prose-invert max-w-none mb-16 bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800">
           
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4">
-            Bileşik Faiz Hesaplama Formülü
-          </h3>
-          <p>
-            Hesaplama aracı arka planda şu matematiksel formülü kullanır: <code>A = P(1 + r/n)^(nt)</code>
-          </p>
-          <ul>
-            <li><strong>A:</strong> Gelecekteki toplam değer (Anapara + Faiz)</li>
-            <li><strong>P:</strong> Anapara (Başlangıç yatırımı)</li>
-            <li><strong>r:</strong> Yıllık faiz veya getiri oranı (Ondalık cinsinden)</li>
-            <li><strong>n:</strong> Faizin yılda kaç kez bileşikleneceği (Örn: Aylık için 12)</li>
-            <li><strong>t:</strong> Yıl cinsinden süre</li>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Basit Faiz Hesaplama Formülü</h2>
+          <p>Basit faiz hesaplama formülü şu şekildedir:</p>
+          <p className="font-mono bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-center font-bold">Basit Faiz = Anapara x Faiz Oranı x Zaman</p>
+          
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-8 mb-4">Basit Faiz Nasıl Hesaplanır?</h3>
+          <p className="font-mono bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-center font-bold mb-4">BasitFaiz = Anapara × FaizOranı × Zaman</p>
+          <ul className="space-y-2">
+            <li><strong>Anapara (P):</strong> Başlangıçta yatırılan veya borç alınan para miktarı.</li>
+            <li><strong>Faiz Oranı (r):</strong> Yıllık faiz oranı. Genellikle yüzde (%) cinsinden ifade edilir ve hesaplamalarda ondalık olarak kullanılır (örneğin, %5 faiz oranı = 0.05).</li>
+            <li><strong>Zaman (t):</strong> Faizin hesaplandığı süre.</li>
           </ul>
-
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4">
-            Yatırım Stratejisi Olarak Bileşik Getiri
-          </h3>
+          
+          <hr className="my-10 border-slate-200 dark:border-slate-800" />
+          
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Bileşik Faiz Formülü</h2>
+          <p className="font-mono bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-center font-bold mb-4">A = P × (1 + r/n)^(n×t)</p>
+          <p><strong>Burada:</strong></p>
+          <ul className="space-y-2">
+            <li><strong>A:</strong> Faiz dahil toplam tutar</li>
+            <li><strong>P:</strong> Anapara (başlangıçta yatırılan para)</li>
+            <li><strong>r:</strong> Yıllık faiz oranı (ondalık biçimde ifade edilir)</li>
+            <li><strong>n:</strong> Faizin kaç kez bileşik hale getirildiği (örneğin, yıllık = 1, altı aylık = 2, üç aylık = 4, aylık = 12, günlük = 365)</li>
+            <li><strong>t:</strong> Süre (yıl olarak)</li>
+          </ul>
+          
+          <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-8 mb-4">Bileşik Faiz Nasıl Hesaplanır?</h3>
           <p>
-            Sadece banka mevduatlarında değil; temettü veren hisse senetlerinde (Geri alım yaparak), yatırım fonlarında ve Eurobond'larda elde ettiğiniz kupon gelirlerini tekrar aynı araca yatırarak kendi bileşik getiri sisteminizi kurabilirsiniz. Profesyonel yatırımcıların en büyük silahı piyasa zamanlaması değil, piyasada kalınan süredir (Time in the market beats timing the market).
+            Bileşik faiz hesaplama yöntemi, anaparanın her dönem sonunda biriken faizin de dahil edilerek büyütülmesi ilkesine dayanır. Bu sayede faiz, sadece anapara üzerinden değil, anapara + önceki dönem faizleri üzerinden hesaplanır. Bileşik faiz hesaplamasında, faiz birden fazla kez uygulanır ve zamanla daha yüksek getiriler sağlar.
           </p>
+
+          <hr className="my-10 border-slate-200 dark:border-slate-800" />
+
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Vadeli Mevduat Faizi Hesaplama</h2>
+          <p>
+            Vadeli mevduat faiz hesaplaması, basit faiz yöntemi ile yapılır. Yani, yatırılan anapara üzerinden belirli bir faiz oranı uygulanarak hesaplanır.
+          </p>
+          <p className="font-mono bg-slate-100 dark:bg-slate-800 p-4 rounded-xl text-center font-bold">Basit Faiz Formülü: Faiz = Anapara × Faiz Oranı × VadeSuresi (Gün Cinsinden)</p>
+
         </section>
 
         {/* 8. Sık Sorulan Sorular (FAQ) */}
