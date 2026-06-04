@@ -1,112 +1,307 @@
 "use client";
 
-import React, { useState } from "react";
-import { Pie } from "react-chartjs-2";
-import { Card, InputGroup, ResultBox, AIAnalysisDashboard, formatCurrency } from "./shared";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useSaveCalculation } from "@/lib/useSaveCalculation";
+import React, { useState, useEffect } from "react";
+import { formatCurrency } from "./shared";
+import { Info } from "lucide-react";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+type LoanType = "ihtiyac" | "konut" | "tasit";
+
+interface AmortizationRow {
+  month: number;
+  installment: number;
+  principalPayment: number;
+  interestPayment: number;
+  taxPayment: number;
+  remainingBalance: number;
+}
 
 export default function LoanCalculator() {
-  const [loan, setLoan] = useState({ amount: 250000, rate: 3.5, term: 36 });
-  const [result, setResult] = useState<{ payment: number; total: number; totalInterest: number; chartData: any } | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const { saveCalculation, isSaving, user } = useSaveCalculation();
+  const [activeTab, setActiveTab] = useState<LoanType>("ihtiyac");
+  
+  const [amount, setAmount] = useState<string>("100000");
+  const [rate, setRate] = useState<string>("3.5");
+  const [term, setTerm] = useState<number>(12);
+
+  const [result, setResult] = useState<{
+    monthlyPayment: number;
+    totalPayment: number;
+    totalInterestAndTax: number;
+    schedule: AmortizationRow[];
+  } | null>(null);
+
+  // Dynamic limits
+  const amountVal = parseFloat(amount) || 0;
+  
+  let maxTerm = 36;
+  let warningMsg = "";
+
+  if (activeTab === "ihtiyac") {
+    if (amountVal > 250000) {
+      maxTerm = 12;
+      warningMsg = "Yasal düzenlemelere göre, 250.000 TL üzeri ihtiyaç kredilerinde vade 12 ay ile sınırlandırılmıştır.";
+    } else {
+      maxTerm = 36;
+    }
+  } else if (activeTab === "tasit") {
+    if (amountVal > 1200000 && amountVal <= 2000000) {
+      maxTerm = 12;
+      warningMsg = "Yasal düzenlemelere göre, 1.200.001 TL – 2.000.000 TL taşıt kredilerinde vade 12 ay ile sınırlandırılmıştır.";
+    } else {
+      maxTerm = 48; // Standard fallback
+    }
+  } else if (activeTab === "konut") {
+    maxTerm = 120;
+  }
+
+  // Adjust term if it exceeds the new dynamic max
+  useEffect(() => {
+    if (term > maxTerm) {
+      setTerm(maxTerm);
+    }
+  }, [maxTerm, term]);
+
+  const handleTabChange = (tab: LoanType) => {
+    setActiveTab(tab);
+    setResult(null);
+  };
 
   const calculate = () => {
-    setError(null);
-    if (loan.amount <= 0 || loan.term <= 0 || loan.rate <= 0) {
-      setError("Lütfen geçerli (sıfırdan büyük) değerler giriniz.");
-      setResult(null);
-      return;
+    if (!amountVal || !parseFloat(rate) || !term) return;
+
+    const P = amountVal;
+    const baseRate = parseFloat(rate) / 100; // e.g. 0.035
+    const n = term;
+
+    let kkdfRate = 0;
+    let bsmvRate = 0;
+
+    if (activeTab === "ihtiyac") {
+      kkdfRate = 0.15;
+      bsmvRate = 0.15;
+    } else if (activeTab === "tasit") {
+      kkdfRate = 0;
+      bsmvRate = 0.05;
+    } else if (activeTab === "konut") {
+      kkdfRate = 0;
+      bsmvRate = 0;
     }
 
-    const r = loan.rate / 100;
-    const payment = loan.amount * (r * Math.pow(1 + r, loan.term)) / (Math.pow(1 + r, loan.term) - 1);
-    const total = payment * loan.term;
-    const totalInterest = total - loan.amount;
+    const effectiveRate = baseRate * (1 + kkdfRate + bsmvRate);
+
+    // PMT Formula: M = P * [ r * (1+r)^n ] / [ (1+r)^n - 1 ]
+    const M = P * (effectiveRate * Math.pow(1 + effectiveRate, n)) / (Math.pow(1 + effectiveRate, n) - 1);
+
+    const schedule: AmortizationRow[] = [];
+    let remainingBalance = P;
+    let totalInterestAndTax = 0;
+
+    for (let i = 1; i <= n; i++) {
+      const interestForMonth = remainingBalance * baseRate;
+      const kkdfForMonth = interestForMonth * kkdfRate;
+      const bsmvForMonth = interestForMonth * bsmvRate;
+      const taxForMonth = kkdfForMonth + bsmvForMonth;
+      
+      const totalInterestTaxMonth = interestForMonth + taxForMonth;
+      const principalForMonth = M - totalInterestTaxMonth;
+      
+      remainingBalance -= principalForMonth;
+      
+      // Fix floating point errors on last month
+      if (i === n && Math.abs(remainingBalance) < 1) {
+        remainingBalance = 0;
+      }
+
+      totalInterestAndTax += totalInterestTaxMonth;
+
+      schedule.push({
+        month: i,
+        installment: M,
+        principalPayment: principalForMonth,
+        interestPayment: interestForMonth,
+        taxPayment: taxForMonth,
+        remainingBalance: remainingBalance > 0 ? remainingBalance : 0
+      });
+    }
 
     setResult({
-      payment,
-      total,
-      totalInterest,
-      chartData: {
-        labels: ["Ana Para", "Toplam Faiz"],
-        datasets: [
-          {
-            data: [loan.amount, totalInterest],
-            backgroundColor: ["#0f172a", "#d97706"], // Lacivert ve Altın
-            borderColor: ["#1e293b", "#b45309"],
-            borderWidth: 1,
-          },
-        ],
-      },
+      monthlyPayment: M,
+      totalPayment: M * n,
+      totalInterestAndTax: totalInterestAndTax,
+      schedule
     });
   };
 
-  const handleSave = () => {
-    if (result) {
-      saveCalculation("Kredi / Anüite", `Aylık Taksit: ${formatCurrency(result.payment)}`);
-    }
-  };
-
   return (
-    <Card title="Kredi / Anüite Hesaplama">
-      {error && <div className="mb-4 text-sm text-red-500 font-semibold bg-red-100 dark:bg-red-900/30 p-3 rounded-lg">{error}</div>}
-      <InputGroup label="Kredi Tutarı (Ana Para)" value={loan.amount} onChange={(e: any) => setLoan({ ...loan, amount: +e.target.value })} />
-      <InputGroup label="Aylık Faiz Oranı (%)" value={loan.rate} onChange={(e: any) => setLoan({ ...loan, rate: +e.target.value })} />
-      <InputGroup label="Vade (Ay)" value={loan.term} onChange={(e: any) => setLoan({ ...loan, term: +e.target.value })} />
-      <button onClick={calculate} className="w-full py-3 bg-slate-900 dark:bg-amber-600 text-white rounded-xl font-bold hover:opacity-90 transition-all duration-300">Ödeme Planını Hesapla</button>
-      
-      {result && (
-        <div className="mt-6">
-          <ResultBox 
-            show={true} 
-            title="Aylık Taksit Tutarınız" 
-            value={formatCurrency(result.payment)} 
-            note={`Vade boyunca ödenecek toplam tutar: ${formatCurrency(result.total)}`} 
-            onSave={user ? handleSave : undefined}
-            isSaving={isSaving}
-          />
-          <div className="mt-4 grid grid-cols-2 gap-4">
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-xs text-slate-500 uppercase font-semibold mb-1">Toplam Ana Para</div>
-              <div className="text-lg font-bold text-blue-600 dark:text-blue-400">{formatCurrency(loan.amount)}</div>
-            </div>
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
-              <div className="text-xs text-slate-500 uppercase font-semibold mb-1">Toplam Faiz Yükü</div>
-              <div className="text-lg font-bold text-amber-600 dark:text-amber-500">{formatCurrency(result.totalInterest)}</div>
-            </div>
+    <div className="w-full">
+      {/* Dynamic Header */}
+      <header className="mb-12 text-center md:text-left">
+        <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+          Kredi <span className="text-amber-600">Hesaplama</span>
+        </h1>
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
+          Aylık taksit, faiz, yasal vergiler ve toplam ödeme tutarınızı görmek için kredi hesaplama aracını kullanın.
+        </p>
+      </header>
+
+      <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+        
+        {/* Tabs */}
+        <div className="flex p-2 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+          <div className="w-full grid grid-cols-3 gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
+            <button
+              onClick={() => handleTabChange("ihtiyac")}
+              className={`py-3 rounded-xl font-bold transition-all text-sm md:text-base ${
+                activeTab === "ihtiyac" 
+                  ? "bg-white dark:bg-amber-600 text-slate-900 dark:text-white shadow-sm" 
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              }`}
+            >
+              İhtiyaç
+            </button>
+            <button
+              onClick={() => handleTabChange("konut")}
+              className={`py-3 rounded-xl font-bold transition-all text-sm md:text-base ${
+                activeTab === "konut" 
+                  ? "bg-white dark:bg-amber-600 text-slate-900 dark:text-white shadow-sm" 
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              }`}
+            >
+              Konut
+            </button>
+            <button
+              onClick={() => handleTabChange("tasit")}
+              className={`py-3 rounded-xl font-bold transition-all text-sm md:text-base ${
+                activeTab === "tasit" 
+                  ? "bg-white dark:bg-amber-600 text-slate-900 dark:text-white shadow-sm" 
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              }`}
+            >
+              Taşıt
+            </button>
           </div>
-          <div className="mt-6 flex justify-center h-48">
-            <Pie data={result.chartData} options={{ maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8' } } } }} />
+        </div>
+
+        {/* Form Area */}
+        <div className="p-6 md:p-8 space-y-8">
+          
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white">Lütfen kredi bilgilerinizi girin.</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Amount */}
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">Kredi Tutarı (TL)</label>
+              <input 
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full text-center bg-transparent text-4xl md:text-5xl font-light text-slate-900 dark:text-white focus:outline-none placeholder-slate-300"
+                placeholder="0"
+              />
+            </div>
+
+            {/* Rate */}
+            <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+              <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-4">Aylık faiz oranı (%)</label>
+              <input 
+                type="number"
+                value={rate}
+                onChange={(e) => setRate(e.target.value)}
+                className="w-full text-center bg-transparent text-4xl md:text-5xl font-light text-slate-900 dark:text-white focus:outline-none placeholder-slate-300"
+                placeholder="0"
+              />
+            </div>
           </div>
 
-          <AIAnalysisDashboard 
-            score={loan.rate < 2 ? 80 : loan.rate < 4 ? 60 : 35}
-            riskLevel={result.totalInterest > loan.amount ? 'Yüksek' : 'Orta'}
-            growthPotential='Negatif (Borç)'
-            inflationImpact={loan.rate > 4 ? 'Negatif' : 'Nötr'}
-            longTermView={
-              result.totalInterest > loan.amount
-                ? "Kredinin toplam faiz yükü, çektiğiniz anaparayı aşmış durumda. Bu çok pahalı bir borçlanmadır. Eğer bu borç yüksek getirili bir yatırıma veya ticarete (kaldıraç) dönüşmüyorsa, uzun vadeli finansal sağlığınızı ciddi şekilde tehdit edebilir."
-                : loan.term > 60
-                ? "Uzun vadeli borçlanma aylık taksitleri düşürse de toplamda ödeyeceğiniz faiz yükünü ciddi oranda artırır. Erken kapama veya ara ödeme seçeneklerini mutlaka değerlendirin."
-                : "Borçlanma maliyetiniz nispeten yönetilebilir seviyede. Aylık taksitlerin düzenli ödenmesi kredi notunuzu pozitif etkileyecektir."
-            }
-            pros={[
-              "Nakit ihtiyacını anında karşılayarak likidite sağlar.",
-              "Enflasyonun kredinin faiz oranından yüksek olduğu durumlarda, reel olarak borcunuz eriyebilir."
-            ]}
-            cons={[
-              `Toplam geri ödeme anaparanın ${((result.total / loan.amount)).toFixed(2)} katı seviyesinde.`,
-              `Sadece faiz için bankaya ödenecek tutar ${formatCurrency(result.totalInterest)}.`,
-              "Kredi ödemeleri aylık nakit akışınızı (bütçenizi) daraltır."
-            ]}
-          />
+          {/* Dynamic Warning */}
+          {warningMsg && (
+            <div className="flex items-start gap-3 text-amber-700 dark:text-amber-500 bg-amber-50 dark:bg-amber-900/10 p-4 rounded-xl border border-amber-100 dark:border-amber-900/30">
+              <Info className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <p className="text-sm font-medium">{warningMsg}</p>
+            </div>
+          )}
+
+          {/* Slider */}
+          <div className="bg-slate-50 dark:bg-slate-800/50 p-8 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <label className="block text-center text-sm font-semibold text-slate-500 dark:text-slate-400 mb-6">Vade sayısı (ay)</label>
+            <div className="text-center mb-8">
+              <span className="text-5xl font-medium text-slate-900 dark:text-white">{term}</span>
+              <span className="text-2xl text-slate-500 ml-2">ay</span>
+            </div>
+            
+            <div className="px-4">
+              <input 
+                type="range" 
+                min="1" 
+                max={maxTerm} 
+                value={term} 
+                onChange={(e) => setTerm(parseInt(e.target.value))}
+                className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-slate-900 dark:accent-amber-600"
+              />
+              <div className="flex justify-between text-xs text-slate-400 mt-2 font-medium">
+                <span>1 ay</span>
+                <span>{maxTerm} ay</span>
+              </div>
+            </div>
+          </div>
+
+          <button 
+            onClick={calculate}
+            className="w-full py-4 bg-slate-900 dark:bg-amber-600 text-white rounded-2xl font-bold text-lg hover:bg-slate-800 dark:hover:bg-amber-700 transition-colors shadow-lg shadow-slate-900/20 dark:shadow-amber-600/20"
+          >
+            Hesapla
+          </button>
+
+          {/* Results Area */}
+          {result && (
+            <div className="mt-12 animate-in fade-in slide-in-from-bottom-4">
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-slate-900 dark:bg-slate-800 p-6 rounded-2xl text-white">
+                  <div className="text-sm text-slate-400 mb-2">Aylık Taksit</div>
+                  <div className="text-3xl font-bold text-amber-500">{formatCurrency(result.monthlyPayment)}</div>
+                </div>
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                  <div className="text-sm text-slate-500 mb-2">Toplam Geri Ödeme</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalPayment)}</div>
+                </div>
+                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                  <div className="text-sm text-slate-500 mb-2">Toplam Faiz ve Vergi</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalInterestAndTax)}</div>
+                </div>
+              </div>
+
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-6">Amortisman (Ödeme) Planı</h3>
+              
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
+                  <thead className="text-xs uppercase bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-300">
+                    <tr>
+                      <th className="px-6 py-4 rounded-tl-xl">Ay</th>
+                      <th className="px-6 py-4">Taksit</th>
+                      <th className="px-6 py-4">Anapara</th>
+                      <th className="px-6 py-4">Faiz & Vergi</th>
+                      <th className="px-6 py-4 rounded-tr-xl">Kalan Borç</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {result.schedule.map((row) => (
+                      <tr key={row.month} className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{row.month}</td>
+                        <td className="px-6 py-4 font-medium text-amber-600 dark:text-amber-500">{formatCurrency(row.installment)}</td>
+                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{formatCurrency(row.principalPayment)}</td>
+                        <td className="px-6 py-4 text-slate-700 dark:text-slate-300">{formatCurrency(row.interestPayment + row.taxPayment)}</td>
+                        <td className="px-6 py-4 font-medium text-slate-900 dark:text-white">{formatCurrency(row.remainingBalance)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          )}
+
         </div>
-      )}
-    </Card>
+      </div>
+    </div>
   );
 }
