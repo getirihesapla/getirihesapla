@@ -23,7 +23,10 @@ export default function TabbedInterestCalculator() {
   const [result, setResult] = useState<{ total: number; interest: number } | null>(null);
 
   const calculate = () => {
-    if (!capital || !rate || !termValue) return;
+    if (!capital || !rate || !termValue) {
+      alert("Lütfen hesaplama için gerekli tüm alanları doldurun.");
+      return;
+    }
 
     const P = parseFloat(capital);
     const rInput = parseFloat(rate); // as percentage
@@ -206,6 +209,7 @@ export default function TabbedInterestCalculator() {
                 value={rate}
                 onChange={(e) => setRate(e.target.value)}
                 className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
+                placeholder="0"
               />
             </div>
           </div>
@@ -219,6 +223,7 @@ export default function TabbedInterestCalculator() {
                 value={capital}
                 onChange={(e) => setCapital(e.target.value)}
                 className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
+                placeholder="0"
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
                 <span className="text-slate-800 dark:text-slate-400 font-bold">TL</span>
@@ -235,6 +240,7 @@ export default function TabbedInterestCalculator() {
                 value={termValue}
                 onChange={(e) => setTermValue(e.target.value)}
                 className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium"
+                placeholder="0"
               />
               <div className="relative w-2/5">
                 <select

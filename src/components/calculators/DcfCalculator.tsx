@@ -10,12 +10,12 @@ interface DcfRow {
 }
 
 export default function DcfCalculator() {
-  const [fcf0, setFcf0] = useState<string>("1000000");
-  const [growthRate, setGrowthRate] = useState<string>("15");
-  const [wacc, setWacc] = useState<string>("20");
-  const [terminalGrowth, setTerminalGrowth] = useState<string>("3");
-  const [netDebt, setNetDebt] = useState<string>("500000");
-  const [shares, setShares] = useState<string>("1000000");
+  const [fcf0, setFcf0] = useState<string>("");
+  const [growthRate, setGrowthRate] = useState<string>("");
+  const [wacc, setWacc] = useState<string>("");
+  const [terminalGrowth, setTerminalGrowth] = useState<string>("");
+  const [netDebt, setNetDebt] = useState<string>("");
+  const [shares, setShares] = useState<string>("");
 
   const [result, setResult] = useState<{
     valuePerShare: number;
@@ -25,6 +25,11 @@ export default function DcfCalculator() {
   } | null>(null);
 
   const calculate = () => {
+    if (!fcf0 || !growthRate || !wacc || !terminalGrowth || !netDebt || !shares) {
+      alert("Lütfen hesaplama için gerekli tüm alanları doldurun.");
+      return;
+    }
+
     const pFcf0 = parseFloat(fcf0) || 0;
     const pGrowth = (parseFloat(growthRate) || 0) / 100;
     const pWacc = (parseFloat(wacc) || 0) / 100;

@@ -17,8 +17,8 @@ interface AmortizationRow {
 export default function LoanCalculator() {
   const [activeTab, setActiveTab] = useState<LoanType>("ihtiyac");
   
-  const [amount, setAmount] = useState<string>("100000");
-  const [rate, setRate] = useState<string>("3.5");
+  const [amount, setAmount] = useState<string>("");
+  const [rate, setRate] = useState<string>("");
   const [term, setTerm] = useState<number>(12);
 
   const [result, setResult] = useState<{
@@ -65,6 +65,11 @@ export default function LoanCalculator() {
   };
 
   const calculate = () => {
+    if (!amount || !rate || !term) {
+      alert("Lütfen hesaplama için gerekli tüm alanları doldurun.");
+      return;
+    }
+    
     if (!amountVal || !parseFloat(rate) || !term) return;
 
     const P = amountVal;
