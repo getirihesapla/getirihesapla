@@ -156,7 +156,7 @@ export default function BesSimulation() {
               onClick={calculate}
               className="w-full py-4 bg-slate-900 dark:bg-amber-600 text-white rounded-2xl font-bold text-lg hover:bg-slate-800 dark:hover:bg-amber-700 transition-colors shadow-lg shadow-slate-900/20 dark:shadow-amber-600/20"
             >
-              Simülasyonu Başlat
+              BES Hesapla
             </button>
           </div>
 
