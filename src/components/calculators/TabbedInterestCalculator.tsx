@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { formatCurrency } from "./shared";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 type TabType = "basit" | "bilesik" | "vadeli";
 type RateType = "yillik" | "aylik" | "gunluk";
@@ -21,6 +22,8 @@ export default function TabbedInterestCalculator() {
 
   // Results
   const [result, setResult] = useState<{ total: number; interest: number } | null>(null);
+
+  const { saveCalculation } = useSaveCalculation();
 
   const calculate = () => {
     if (!capital || !rate || !termValue) {
@@ -92,6 +95,11 @@ export default function TabbedInterestCalculator() {
       total: calculatedTotal,
       interest: calculatedInterest
     });
+
+    const summaryStr = `Anapara: ${Number(P.toFixed(2)).toLocaleString('tr-TR')} TL, Vade: ${tInput} ${termType === 'gun' ? 'Gün' : termType === 'ay' ? 'Ay' : 'Yıl'}, Faiz: %${parseFloat(rate)}`;
+    const resultStr = `${Number(calculatedTotal.toFixed(2)).toLocaleString('tr-TR')} TL (Net)`;
+    const typeLabel = activeTab === "basit" ? "Basit Faiz" : activeTab === "vadeli" ? "Vadeli Mevduat" : "Bileşik Faiz";
+    saveCalculation(typeLabel, summaryStr, resultStr);
   };
 
   const handleTabChange = (tab: TabType) => {

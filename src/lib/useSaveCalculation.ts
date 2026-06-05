@@ -14,24 +14,32 @@ export function useSaveCalculation() {
     return () => unsubscribe();
   }, []);
 
-  const saveCalculation = async (type: string, resultValue: string) => {
-    if (!user) {
-      alert("Hesaplamayı kaydetmek için lütfen giriş yapın.");
-      return;
-    }
-    
+  const saveCalculation = async (type: string, inputsSummary: string, resultValue: string) => {
     setIsSaving(true);
     try {
-      const historyRef = collection(db, "users", user.uid, "history");
-      await addDoc(historyRef, {
-        type,
-        resultValue,
-        createdAt: serverTimestamp(),
-      });
-      alert("Hesaplama başarıyla geçmişinize eklendi!");
+      if (user) {
+        const historyRef = collection(db, "users", user.uid, "history");
+        await addDoc(historyRef, {
+          type,
+          inputsSummary,
+          resultValue,
+          createdAt: serverTimestamp(),
+        });
+      } else {
+        const localHistory = JSON.parse(localStorage.getItem('korfu_history') || '[]');
+        const newItem = {
+          id: Date.now().toString(),
+          type,
+          inputsSummary,
+          resultValue,
+          createdAt: new Date().toISOString(),
+        };
+        localHistory.unshift(newItem);
+        localStorage.setItem('korfu_history', JSON.stringify(localHistory.slice(0, 50)));
+      }
+      window.dispatchEvent(new Event('history_updated'));
     } catch (error) {
       console.error("Kaydetme hatası:", error);
-      alert("Kaydedilirken bir hata oluştu.");
     } finally {
       setIsSaving(false);
     }

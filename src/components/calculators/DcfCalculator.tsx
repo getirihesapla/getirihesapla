@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { formatCurrency } from "./shared";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 interface DcfRow {
   year: number;
@@ -16,6 +17,8 @@ export default function DcfCalculator() {
   const [terminalGrowth, setTerminalGrowth] = useState<string>("");
   const [netDebt, setNetDebt] = useState<string>("");
   const [shares, setShares] = useState<string>("");
+
+  const { saveCalculation } = useSaveCalculation();
 
   const [result, setResult] = useState<{
     valuePerShare: number;
@@ -69,6 +72,10 @@ export default function DcfCalculator() {
       equityValue,
       schedule
     });
+
+    const summaryStr = `Firma Dğr: ${Number(enterpriseValue.toFixed(2)).toLocaleString('tr-TR')} TL, Büyüme: %${parseFloat(growthRate)}, WACC: %${parseFloat(wacc)}`;
+    const resultStr = `${Number(valuePerShare.toFixed(2)).toLocaleString('tr-TR')} TL`;
+    saveCalculation("İndirgenmiş Nakit Akımları (İNA)", summaryStr, resultStr);
   };
 
   // Helper to render compact input with +/- buttons

@@ -11,6 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 ChartJS.register(
   CategoryScale,
@@ -27,6 +28,8 @@ export default function BesSimulation() {
   const [contributionIncreaseRate, setContributionIncreaseRate] = useState<string>("");
   const [scenario, setScenario] = useState<"iyimser" | "kotumser">("kotumser");
   const [retirementAge, setRetirementAge] = useState<string>("56");
+
+  const { saveCalculation } = useSaveCalculation();
 
   const [result, setResult] = useState<{
     totalSavings: number;
@@ -84,6 +87,10 @@ export default function BesSimulation() {
       mySavingsData,
       stateContributionData
     });
+
+    const summaryStr = `Aylık Katkı: ${Number(pMonthly.toFixed(2)).toLocaleString('tr-TR')} TL, Yaş: ${pAge}, Senaryo: ${scenario === "iyimser" ? "%3 İyimser" : "%1 Kötümser"}`;
+    const resultStr = `${Number(totalSavings.toFixed(2)).toLocaleString('tr-TR')} TL`;
+    saveCalculation("Bireysel Emeklilik (BES)", summaryStr, resultStr);
   };
 
   return (

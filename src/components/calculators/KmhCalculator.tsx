@@ -1,11 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 export default function KmhCalculator() {
   const [amount, setAmount] = useState<string>("");
   const [rate, setRate] = useState<string>("");
   const [days, setDays] = useState<string>("");
+
+  const { saveCalculation } = useSaveCalculation();
 
   const [result, setResult] = useState<{
     totalPayment: number;
@@ -39,6 +42,10 @@ export default function KmhCalculator() {
       interest: grossInterest,
       tax: totalTax
     });
+
+    const summaryStr = `Tutar: ${Number(pAmount.toFixed(2)).toLocaleString('tr-TR')} TL, Vade: ${pDays} Gün, Faiz: %${pRate}`;
+    const resultStr = `${Number(totalPayment.toFixed(2)).toLocaleString('tr-TR')} TL`;
+    saveCalculation("KMH Hesaplama", summaryStr, resultStr);
   };
 
   return (

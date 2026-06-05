@@ -1,10 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 export default function CreditCardCalculator() {
   const [limit, setLimit] = useState<string>("");
   const [debt, setDebt] = useState<string>("");
+
+  const { saveCalculation } = useSaveCalculation();
 
   const [result, setResult] = useState<{
     minimumPayment: number;
@@ -41,6 +44,10 @@ export default function CreditCardCalculator() {
       limit: pLimit,
       debt: pDebt
     });
+
+    const summaryStr = `Limit: ${Number(pLimit.toFixed(2)).toLocaleString('tr-TR')} TL, Dönem Borcu: ${Number(pDebt.toFixed(2)).toLocaleString('tr-TR')} TL`;
+    const resultStr = `${Number(minimumPayment.toFixed(2)).toLocaleString('tr-TR')} TL`;
+    saveCalculation("Kredi Kartı Asgari", summaryStr, resultStr);
   };
 
   return (

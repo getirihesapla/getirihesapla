@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { formatCurrency } from "./shared";
+import { useSaveCalculation } from "@/lib/useSaveCalculation";
 
 type LoanType = "ihtiyac" | "konut" | "tasit";
 
@@ -20,6 +21,8 @@ export default function LoanCalculator() {
   const [amount, setAmount] = useState<string>("");
   const [rate, setRate] = useState<string>("");
   const [term, setTerm] = useState<number>(12);
+
+  const { saveCalculation } = useSaveCalculation();
 
   const [result, setResult] = useState<{
     monthlyPayment: number;
@@ -133,6 +136,11 @@ export default function LoanCalculator() {
       totalInterestAndTax: totalInterestAndTax,
       schedule
     });
+
+    const summaryStr = `Anapara: ${Number(amountVal.toFixed(2)).toLocaleString('tr-TR')} TL, Vade: ${term} Ay, Faiz: %${parseFloat(rate)}`;
+    const resultStr = `${Number(M.toFixed(2)).toLocaleString('tr-TR')} TL Taksit`;
+    const typeLabel = activeTab === "ihtiyac" ? "İhtiyaç Kredisi" : activeTab === "tasit" ? "Taşıt Kredisi" : "Konut Kredisi";
+    saveCalculation(typeLabel, summaryStr, resultStr);
   };
 
   return (
