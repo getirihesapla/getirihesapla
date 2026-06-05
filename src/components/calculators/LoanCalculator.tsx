@@ -189,10 +189,6 @@ export default function LoanCalculator() {
                   className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium"
                   placeholder="0"
                 />
-                <div className="flex border-l border-slate-200 dark:border-slate-700 h-full">
-                  <button onClick={() => setAmount(String(Math.max(0, Number(amount) - 10000)))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors font-bold">-</button>
-                  <button onClick={() => setAmount(String(Number(amount) + 10000))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 transition-colors font-bold">+</button>
-                </div>
               </div>
             </div>
 
@@ -208,10 +204,6 @@ export default function LoanCalculator() {
                   className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium"
                   placeholder="0.00"
                 />
-                <div className="flex border-l border-slate-200 dark:border-slate-700 h-full">
-                  <button onClick={() => setRate((Math.max(0, Number(rate) - 0.1)).toFixed(2))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors font-bold">-</button>
-                  <button onClick={() => setRate((Number(rate) + 0.1).toFixed(2))} className="px-4 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 transition-colors font-bold">+</button>
-                </div>
               </div>
             </div>
           </div>
