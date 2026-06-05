@@ -254,18 +254,18 @@ export default function LoanCalculator() {
           {result && (
             <div className="mt-12 animate-in fade-in slide-in-from-bottom-4">
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-slate-900 dark:bg-slate-800 p-6 rounded-2xl text-white">
-                  <div className="text-sm text-slate-400 mb-2">Aylık Taksit</div>
-                  <div className="text-3xl font-bold text-amber-500">{formatCurrency(result.monthlyPayment)}</div>
+              <div className="w-full grid grid-cols-3 gap-1.5 mb-8">
+                <div className="bg-slate-900 dark:bg-slate-800 p-2 rounded-xl text-white min-w-0 overflow-hidden">
+                  <div className="text-xs md:text-sm text-slate-400 mb-1 truncate">Aylık Taksit</div>
+                  <div className="text-base md:text-lg font-bold text-amber-500 truncate">{Number(result.monthlyPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-                  <div className="text-sm text-slate-500 mb-2">Toplam Geri Ödeme</div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalPayment)}</div>
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 min-w-0 overflow-hidden">
+                  <div className="text-xs md:text-sm text-slate-500 mb-1 truncate">Toplam Geri Ödeme</div>
+                  <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">{Number(result.totalPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
-                  <div className="text-sm text-slate-500 mb-2">Toplam Faiz ve Vergi</div>
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">{formatCurrency(result.totalInterestAndTax)}</div>
+                <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 min-w-0 overflow-hidden">
+                  <div className="text-xs md:text-sm text-slate-500 mb-1 truncate">Toplam Faiz & Vergi</div>
+                  <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">{Number(result.totalInterestAndTax.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
                 </div>
               </div>
 
