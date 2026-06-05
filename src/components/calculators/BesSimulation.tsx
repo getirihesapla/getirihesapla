@@ -26,6 +26,7 @@ export default function BesSimulation() {
   const [age, setAge] = useState<string>("");
   const [contributionIncreaseRate, setContributionIncreaseRate] = useState<string>("");
   const [fundReturnRate, setFundReturnRate] = useState<string>("");
+  const [retirementAge, setRetirementAge] = useState<string>("56");
 
   const [result, setResult] = useState<{
     totalSavings: number;
@@ -45,12 +46,14 @@ export default function BesSimulation() {
     const pIncreaseRate = (parseFloat(contributionIncreaseRate) || 0) / 100;
     const pFundReturn = (parseFloat(fundReturnRate) || 0) / 100;
 
-    if (pAge >= 56) {
-      alert("Mevcut yaşınız 56 veya daha büyük olamaz. Emeklilik yaşı 56'dır.");
+    const pRetirementAge = parseInt(retirementAge) || 56;
+
+    if (pAge >= pRetirementAge) {
+      alert(`Mevcut yaşınız seçilen emeklilik yaşından (${pRetirementAge}) küçük olmalıdır.`);
       return;
     }
 
-    const nYears = 56 - pAge;
+    const nYears = pRetirementAge - pAge;
     let contributionYearly = pMonthly * 12;
 
     let myPool = 0;
@@ -147,6 +150,24 @@ export default function BesSimulation() {
                   className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium text-left"
                   placeholder="0.0"
                 />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 md:col-span-2">
+              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Emeklilik Yaşınız</label>
+              <div className="relative">
+                <select
+                  value={retirementAge}
+                  onChange={(e) => setRetirementAge(e.target.value)}
+                  className="w-full appearance-none px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800 dark:text-slate-200 font-medium cursor-pointer"
+                >
+                  {Array.from({ length: 20 }, (_, i) => 56 + i).map(age => (
+                    <option key={age} value={age}>{age}</option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500 dark:text-amber-500">
+                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
               </div>
             </div>
           </div>
