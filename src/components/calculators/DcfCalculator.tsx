@@ -83,35 +83,15 @@ export default function DcfCalculator() {
     return (
       <div className="flex flex-col gap-2">
         <label className="text-sm font-bold text-slate-800 dark:text-slate-200">{label}</label>
-        <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-amber-500">
+        <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus-within:ring-2 focus-within:ring-amber-500">
           <input 
             type="number"
             step={isDecimal ? "0.01" : "1"}
             value={val}
             onChange={(e) => setVal(e.target.value)}
-            className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium"
+            className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium text-left"
             placeholder={placeholder}
           />
-          <div className="flex border-l border-slate-200 dark:border-slate-700 h-full">
-            <button 
-              onClick={() => {
-                const num = Number(val) || 0;
-                setVal(isDecimal ? (num - step).toFixed(2) : String(num - step));
-              }} 
-              className="px-3 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 transition-colors font-bold"
-            >
-              -
-            </button>
-            <button 
-              onClick={() => {
-                const num = Number(val) || 0;
-                setVal(isDecimal ? (num + step).toFixed(2) : String(num + step));
-              }} 
-              className="px-3 py-3 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-400 border-l border-slate-200 dark:border-slate-700 transition-colors font-bold"
-            >
-              +
-            </button>
-          </div>
         </div>
       </div>
     );
