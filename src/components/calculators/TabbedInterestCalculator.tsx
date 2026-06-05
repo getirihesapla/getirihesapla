@@ -103,20 +103,17 @@ export default function TabbedInterestCalculator() {
   };
 
   return (
-    <div className="w-full">
-      {/* Dynamic Header */}
-      <header className="mb-12 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
+    <div className="w-full h-full flex flex-col">
+      <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-full">
+      
+      {/* Title */}
+      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-center">
+        <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">
           {activeTab === "basit" && "Basit Faiz Hesaplama"}
           {activeTab === "bilesik" && "Bileşik Faiz Hesaplama"}
-          {activeTab === "vadeli" && "Vadeli Mevduat Faizi Hesaplama"}
-        </h1>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl leading-relaxed mx-auto md:mx-0">
-          Aşağıdaki sekmeleri kullanarak faiz ve vade bilgilerinizi girin, yatırımınızın getirisini kolayca hesaplayın.
-        </p>
-      </header>
-
-      <div className="w-full max-w-4xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          {activeTab === "vadeli" && "Vadeli Mevduat Faizi"}
+        </h2>
+      </div>
       
       {/* Tabs */}
       <div className="flex flex-wrap justify-center gap-2 md:gap-4 p-6 bg-white border-b border-slate-50">
@@ -153,8 +150,8 @@ export default function TabbedInterestCalculator() {
       </div>
 
       {/* Form Area */}
-      <div className="p-8 bg-[#f8fafc] flex justify-center">
-        <div className="w-full max-w-lg space-y-6">
+      <div className="p-6 md:p-8 space-y-6 flex-grow flex flex-col">
+        <div className="w-full space-y-6">
           
           {/* Sıklık (Sadece Bileşik Faiz) */}
           {activeTab === "bilesik" && (

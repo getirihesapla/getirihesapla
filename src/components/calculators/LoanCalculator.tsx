@@ -136,11 +136,13 @@ export default function LoanCalculator() {
   };
 
   return (
-    <div className="w-full">
-      {/* Removed massive header to match grid compactness */}
-
-      <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div className="w-full h-full flex flex-col">
+      <div className="w-full max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-full">
         
+        {/* Title */}
+        <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-center">
+          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">Kredi / Anüite Hesaplama</h2>
+        </div>
         {/* Tabs */}
         <div className="flex p-2 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
           <div className="w-full grid grid-cols-3 gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-2xl">
