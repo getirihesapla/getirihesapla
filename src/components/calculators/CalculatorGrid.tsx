@@ -4,6 +4,7 @@ import React from "react";
 import TabbedInterestCalculator from "./TabbedInterestCalculator";
 import LoanCalculator from "./LoanCalculator";
 import DcfCalculator from "./DcfCalculator";
+import CreditCardCalculator from "./CreditCardCalculator";
 import BesSimulation from "./BesSimulation";
 import BondValuation from "./BondValuation";
 
@@ -13,6 +14,7 @@ export default function CalculatorGrid() {
       <TabbedInterestCalculator />
       <LoanCalculator />
       <DcfCalculator />
+      <CreditCardCalculator />
       <BesSimulation />
       <BondValuation />
     </div>
