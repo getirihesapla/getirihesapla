@@ -25,7 +25,7 @@ export default function BesSimulation() {
   const [monthlyContribution, setMonthlyContribution] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [contributionIncreaseRate, setContributionIncreaseRate] = useState<string>("");
-  const [fundReturnRate, setFundReturnRate] = useState<string>("");
+  const [scenario, setScenario] = useState<"iyimser" | "kotumser">("kotumser");
   const [retirementAge, setRetirementAge] = useState<string>("56");
 
   const [result, setResult] = useState<{
@@ -36,7 +36,7 @@ export default function BesSimulation() {
   } | null>(null);
 
   const calculate = () => {
-    if (!monthlyContribution || !age || !contributionIncreaseRate || !fundReturnRate) {
+    if (!monthlyContribution || !age || !contributionIncreaseRate) {
       alert("Lütfen hesaplama için gerekli tüm alanları doldurun.");
       return;
     }
@@ -44,7 +44,7 @@ export default function BesSimulation() {
     const pMonthly = parseFloat(monthlyContribution) || 0;
     const pAge = parseInt(age) || 0;
     const pIncreaseRate = (parseFloat(contributionIncreaseRate) || 0) / 100;
-    const pFundReturn = (parseFloat(fundReturnRate) || 0) / 100;
+    const pFundReturn = scenario === "iyimser" ? 0.03 : 0.01;
 
     const pRetirementAge = parseInt(retirementAge) || 56;
 
@@ -92,7 +92,7 @@ export default function BesSimulation() {
         
         {/* Title */}
         <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 text-center">
-          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">Bireysel Emeklilik (BES) Simülasyonu</h2>
+          <h2 className="text-2xl font-serif font-bold text-slate-900 dark:text-white">Bireysel Emeklilik (BES)</h2>
         </div>
 
         <div className="p-6 md:p-8 space-y-6 flex-grow flex flex-col">
@@ -140,16 +140,30 @@ export default function BesSimulation() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Tahmini Yıllık Fon Getiri Oranı (%)</label>
-              <div className="flex items-center bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl focus-within:ring-2 focus-within:ring-amber-500">
-                <input 
-                  type="number"
-                  step="0.1"
-                  value={fundReturnRate}
-                  onChange={(e) => setFundReturnRate(e.target.value)}
-                  className="w-full px-4 py-3 bg-transparent focus:outline-none text-slate-800 dark:text-slate-200 font-medium text-left"
-                  placeholder="0.0"
-                />
+              <label className="text-sm font-bold text-slate-800 dark:text-slate-200">Yıllık Reel Getiri (Net %)</label>
+              <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3">
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="scenario" 
+                    value="iyimser"
+                    checked={scenario === "iyimser"}
+                    onChange={() => setScenario("iyimser")}
+                    className="w-4 h-4 text-amber-500 bg-white border-slate-300 focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">İyimser (%3)</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer group">
+                  <input 
+                    type="radio" 
+                    name="scenario" 
+                    value="kotumser"
+                    checked={scenario === "kotumser"}
+                    onChange={() => setScenario("kotumser")}
+                    className="w-4 h-4 text-amber-500 bg-white border-slate-300 focus:ring-amber-500 dark:focus:ring-amber-600 dark:ring-offset-slate-800 focus:ring-2 dark:bg-slate-700 dark:border-slate-600 cursor-pointer"
+                  />
+                  <span className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Kötümser (%1)</span>
+                </label>
               </div>
             </div>
 
