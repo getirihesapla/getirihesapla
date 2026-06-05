@@ -48,29 +48,26 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* Hakkımızda / Vizyon */}
             <div className="flex flex-col justify-center">
-              <h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-4">Metodoloji & Vizyon</h3>
+              <h3 className="text-2xl font-serif font-bold text-slate-900 dark:text-white mb-4">Korfu Vizyonu</h3>
               <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 font-medium">
                 <strong className="text-amber-600 dark:text-amber-500">KorfuFinance.com;</strong> finansal kararlarda sezgileri değil, rasyonel matematiği rehber edinen yatırımcılar için tasarlanmış bağımsız bir analiz platformudur. Amacımız, paranın zaman değerini ve piyasa risklerini herkes için şeffaf ve ölçülebilir kılmaktır.
               </p>
             </div>
 
-            {/* Akademik Metodoloji */}
-            <div className="border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 pt-6 md:pt-0 md:pl-10">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Akademik Metodoloji</h3>
-              <ul className="space-y-4">
-                <li className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  <strong className="text-slate-800 dark:text-slate-200 block mb-0.5">Gordon Büyüme Modeli (GGM)</strong>
-                  Hisse senetlerinin içsel değerini, gelecekteki temettü akışlarının iskonto edilmiş bugünkü değeriyle hesaplar.
-                </li>
-                <li className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  <strong className="text-slate-800 dark:text-slate-200 block mb-0.5">Fisher Denklemi</strong>
-                  Nominal getirileri enflasyon şoklarından arındırarak net alım gücünü (Reel Getiri) ölçer.
-                </li>
-                <li className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  <strong className="text-slate-800 dark:text-slate-200 block mb-0.5">Paranın Zaman Değeri (TVM) & Anüite</strong>
-                  Gelecekteki düzenli nakit akışlarının (Ordinary Annuity / Annuity Due) bileşik getiri ve bugünkü değer simülasyonlarını matematiksel kesinlikle işletir.
-                </li>
-              </ul>
+            {/* Manifesto / İddialı Vizyon Bloğu */}
+            <div className="border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800 pt-6 md:pt-0 md:pl-10 flex flex-col gap-6">
+              <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong className="text-amber-600 dark:text-amber-500 block mb-1">Kurumsal Güç, Bireysel Özgürlük</strong>
+                Piyasa gürültüsünü ve spekülasyonları bir kenara bırakıyoruz. Amacımız; dev fonların ve kurumsal aktörlerin kullandığı rasyonel finans matematiğini, pürüzsüz ve minimalist bir deneyimle doğrudan yatırımcının parmaklarının ucuna getirmektir.
+              </div>
+              <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong className="text-amber-600 dark:text-amber-500 block mb-1">Verinin ve Matematiğin Mutlak Hakimiyeti</strong>
+                Finansal kararlarda sezgilere yer yoktur. Korfu; paranın zaman değerini, risk parametrelerini ve içsel değerleme modellerini şeffaf algoritmalara dökerek yatırımlarınıza matematiksel bir kesinlik kazandırır.
+              </div>
+              <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong className="text-amber-600 dark:text-amber-500 block mb-1">Geleceğin Finansal Terminali</strong>
+                Estetikten ödün vermeyen, dikkat dağıtmayan ve tamamen amaca odaklanan bir ekosistem inşa ediyoruz. Karmaşık finans dünyasını rafine bir vizyonla yeniden tanımlıyor, modern sermaye yönetimine rehberlik ediyoruz.
+              </div>
             </div>
           </div>
         </section>
