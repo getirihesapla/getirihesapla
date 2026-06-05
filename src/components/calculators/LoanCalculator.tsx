@@ -259,18 +259,18 @@ export default function LoanCalculator() {
           {result && (
             <div className="mt-12 animate-in fade-in slide-in-from-bottom-4">
               
-              <div className="w-full grid grid-cols-3 gap-1.5 mb-8">
-                <div className="bg-slate-900 dark:bg-slate-800 p-2 rounded-xl text-white min-w-0 overflow-hidden">
-                  <div className="text-xs md:text-sm text-slate-400 mb-1 truncate">Aylık Taksit</div>
-                  <div className="text-base md:text-lg font-bold text-amber-500 truncate">{Number(result.monthlyPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
+              <div className="flex flex-col gap-3 mb-8">
+                <div className="flex justify-between items-center bg-slate-900 dark:bg-slate-800 p-4 rounded-xl text-white shadow-sm">
+                  <span className="text-sm md:text-base font-medium text-slate-300">Aylık Taksit</span>
+                  <span className="text-lg md:text-xl font-bold text-amber-500">{Number(result.monthlyPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</span>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 min-w-0 overflow-hidden">
-                  <div className="text-xs md:text-sm text-slate-500 mb-1 truncate">Toplam Geri Ödeme</div>
-                  <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">{Number(result.totalPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
+                <div className="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <span className="text-sm md:text-base font-medium text-slate-600 dark:text-slate-400">Toplam Geri Ödeme</span>
+                  <span className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{Number(result.totalPayment.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</span>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-800 min-w-0 overflow-hidden">
-                  <div className="text-xs md:text-sm text-slate-500 mb-1 truncate">Toplam Faiz & Vergi</div>
-                  <div className="text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">{Number(result.totalInterestAndTax.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</div>
+                <div className="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                  <span className="text-sm md:text-base font-medium text-slate-600 dark:text-slate-400">Toplam Faiz ve Vergi</span>
+                  <span className="text-lg md:text-xl font-bold text-slate-900 dark:text-white">{Number(result.totalInterestAndTax.toFixed(2)).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL</span>
                 </div>
               </div>
 
