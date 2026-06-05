@@ -7,7 +7,6 @@ import DcfCalculator from "./DcfCalculator";
 import CreditCardCalculator from "./CreditCardCalculator";
 import KmhCalculator from "./KmhCalculator";
 import BesSimulation from "./BesSimulation";
-import BondValuation from "./BondValuation";
 
 export default function CalculatorGrid() {
   return (
@@ -18,7 +17,6 @@ export default function CalculatorGrid() {
       <CreditCardCalculator />
       <KmhCalculator />
       <BesSimulation />
-      <BondValuation />
     </div>
   );
 }
