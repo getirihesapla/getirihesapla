@@ -39,7 +39,7 @@ export default function RealMarketOverview() {
     if (activeTab === 'bist') {
       return ['XU100', 'THYAO', 'TUPRS', 'KCHOL', 'AKBNK', 'ISCTR', 'EREGL'].includes(asset.id);
     } else {
-      return ['BTCUSDT', 'ETHUSDT', 'USDTRY', 'GOLD'].includes(asset.id);
+      return ['BTCUSDT', 'ETHUSDT', 'USDTRY', 'GOLD', 'SILVER'].includes(asset.id);
     }
   });
 

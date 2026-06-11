@@ -78,13 +78,13 @@ export default function LivePriceCard({ asset, data }: LivePriceCardProps) {
   };
 
   let priceFormatted = data.price.toFixed(2);
-  if (asset.type === 'yahoo' && asset.id !== 'XU100' && asset.id !== 'GOLD') {
+  if (asset.type === 'yahoo' && asset.id !== 'XU100' && asset.id !== 'GOLD' && asset.id !== 'SILVER') {
      priceFormatted = `₺${data.price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   } else if (asset.id === 'USDTRY') {
      priceFormatted = `₺${data.price.toFixed(4)}`;
   } else if (asset.type === 'crypto') {
      priceFormatted = `$${data.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  } else if (asset.id === 'GOLD') {
+  } else if (asset.id === 'GOLD' || asset.id === 'SILVER') {
      priceFormatted = `$${data.price.toFixed(2)}`;
   } else if (asset.id === 'XU100') {
      priceFormatted = data.price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

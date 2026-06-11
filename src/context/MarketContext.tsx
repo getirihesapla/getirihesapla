@@ -14,6 +14,7 @@ export const ASSETS = [
   { id: "EREGL", name: "Erdemir", type: "yahoo", symbol: "EREGL.IS" },
   { id: "USDTRY", name: "USD/TRY", type: "crypto", symbol: "USDTTRY" },
   { id: "GOLD", name: "Altın (Ons)", type: "yahoo", symbol: "GC=F" },
+  { id: "SILVER", name: "Gümüş (Ons)", type: "yahoo", symbol: "SI=F" },
 ];
 
 export interface MarketData {
@@ -42,9 +43,9 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
 
     async function fetchYahooData(symbol: string) {
       try {
-        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=5m`;
+        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?range=1d&interval=1m&nocache=${Date.now()}`;
         const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-        const res = await fetch(proxyUrl);
+        const res = await fetch(proxyUrl, { cache: 'no-store' });
         const data = await res.json();
 
         const result = data.chart.result[0];
@@ -118,6 +119,7 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
            if (asset.id === 'ETHUSDT') mockBasePrice = 3500;
            if (asset.id === 'USDTRY') mockBasePrice = 32.50;
            if (asset.id === 'GOLD') mockBasePrice = 2350;
+           if (asset.id === 'SILVER') mockBasePrice = 29.50;
            if (asset.id === 'XU100') mockBasePrice = 10500;
            if (asset.id === 'THYAO') mockBasePrice = 310;
            if (asset.id === 'TUPRS') mockBasePrice = 190;
@@ -180,7 +182,7 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
       }
-    }, 10000); // 10 seconds for more real-time feel
+    }, 5000); // 5 seconds for true real-time feel
 
     return () => {
       isMounted = false;
