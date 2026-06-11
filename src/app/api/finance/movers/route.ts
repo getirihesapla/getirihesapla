@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
@@ -11,7 +12,7 @@ export async function GET() {
           sort: { sortBy: 'change', sortOrder },
           range: [0, 5]
         }),
-        next: { revalidate: 60 } // Cache for 60 seconds
+        cache: 'no-store'
       });
       
       if (!res.ok) throw new Error('Failed to fetch from TV scanner');
