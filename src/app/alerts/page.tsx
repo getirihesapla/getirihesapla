@@ -9,8 +9,9 @@ interface PriceAlert {
   id: string;
   symbol: string;
   name: string;
-  condition: "greater" | "less" | "percent_up" | "percent_down";
+  condition: "greater" | "less" | "percent_up" | "percent_down" | "valuation_gap";
   targetValue: number;
+  valuationPrice?: number;
   basePrice?: number;
   isActive: boolean;
   isTriggered: boolean;
@@ -34,13 +35,20 @@ export default function AlertsPage() {
 
   const [toasts, setToasts] = useState<{id: string, message: string, type: 'success' | 'info'}[]>([]);
 
-  // Form State
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    symbol: string;
+    name: string;
+    currentPrice: number;
+    condition: "greater" | "less" | "percent_up" | "percent_down" | "valuation_gap";
+    targetValue: string;
+    valuationPrice: string;
+  }>({
     symbol: "",
     name: "",
     currentPrice: 0,
-    condition: "greater" as const,
+    condition: "greater",
     targetValue: "",
+    valuationPrice: "",
   });
 
   // Init Auth & Permissions
@@ -104,7 +112,7 @@ export default function AlertsPage() {
     };
 
     fetchPrices();
-    const interval = setInterval(fetchPrices, 15000); // Her 15 saniyede bir kontrol et
+    const interval = setInterval(fetchPrices, 3000); // 3 saniyeye indirilerek High-Priority Thread aktif edildi
     return () => clearInterval(interval);
   }, [alerts]);
 
@@ -185,6 +193,7 @@ export default function AlertsPage() {
         name: formData.name,
         condition: formData.condition,
         targetValue: Number(formData.targetValue),
+        valuationPrice: formData.condition === "valuation_gap" ? Number(formData.valuationPrice) : null,
         basePrice: formData.currentPrice,
         isActive: true,
         isTriggered: false,
@@ -226,7 +235,7 @@ export default function AlertsPage() {
   };
 
   const resetForm = () => {
-    setFormData({ symbol: "", name: "", currentPrice: 0, condition: "greater", targetValue: "" });
+    setFormData({ symbol: "", name: "", currentPrice: 0, condition: "greater", targetValue: "", valuationPrice: "" });
     setSearchQuery("");
   };
 
@@ -320,7 +329,7 @@ export default function AlertsPage() {
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-xs text-slate-400 font-medium">Koşul:</span>
                       <span className="text-sm font-bold text-white bg-slate-800 px-2 py-1 rounded">
-                        {alert.condition === "greater" ? "Yükselirse (≥)" : alert.condition === "less" ? "Düşerse (≤)" : alert.condition === "percent_up" ? "% Yükselirse" : "% Düşerse"}
+                        {alert.condition === "greater" ? "Yükselirse (≥)" : alert.condition === "less" ? "Düşerse (≤)" : alert.condition === "percent_up" ? "% Yükselirse" : alert.condition === "percent_down" ? "% Düşerse" : "Güvenlik Marjı (% İskonto)"}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
@@ -415,11 +424,32 @@ export default function AlertsPage() {
                     <option value="less">Fiyat Şuna Eşit veya Altına İnerse (≤)</option>
                     <option value="percent_up">Şu Kadar Yüzde (%) Değer Kazanırsa</option>
                     <option value="percent_down">Şu Kadar Yüzde (%) Değer Kaybederse</option>
+                    <option value="valuation_gap">İçsel Değerin %X Altına Sarktığında (Güvenlik Marjı)</option>
                   </select>
                 </div>
 
+                {formData.condition === "valuation_gap" && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 text-indigo-400 flex items-center gap-1">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      Hesapladığınız İçsel Değer (Valuation)
+                    </label>
+                    <input 
+                      required 
+                      type="number" 
+                      step="any" 
+                      value={formData.valuationPrice} 
+                      onChange={e => setFormData({...formData, valuationPrice: e.target.value})} 
+                      className="w-full bg-slate-950 border border-indigo-500/50 rounded-xl py-3 px-4 text-white font-mono focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400" 
+                      placeholder="Örn: İNA/Gordon ile bulduğunuz değer" 
+                    />
+                  </div>
+                )}
+
                 <div>
-                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Hedef Değer</label>
+                  <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    {formData.condition === "valuation_gap" ? "Güvenlik Marjı Yüzdesi (%)" : "Hedef Değer"}
+                  </label>
                   <input 
                     required 
                     type="number" 

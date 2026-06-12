@@ -10,8 +10,9 @@ interface PriceAlert {
   id: string;
   symbol: string;
   name: string;
-  condition: "greater" | "less" | "percent_up" | "percent_down";
+  condition: "greater" | "less" | "percent_up" | "percent_down" | "valuation_gap";
   targetValue: number;
+  valuationPrice?: number;
   basePrice?: number;
   isActive: boolean;
   isTriggered: boolean;
@@ -117,6 +118,15 @@ export default function NotificationSystem() {
                   }
                 }
                 break;
+              case "valuation_gap":
+                if (alert.valuationPrice) {
+                  const target = alert.valuationPrice * (1 - (alert.targetValue / 100));
+                  if (currentPrice <= target) {
+                    triggered = true;
+                    msg = `${alert.symbol} canlı fiyatı, içsel değerin (${alert.valuationPrice}) %${alert.targetValue} altına sarktığı için Güvenlik Marjı bölgesine girdi! (Güncel: ${currentPrice})`;
+                  }
+                }
+                break;
             }
 
             if (triggered && user) {
@@ -151,7 +161,7 @@ export default function NotificationSystem() {
     };
 
     fetchAndEvaluate();
-    const interval = setInterval(fetchAndEvaluate, 15000);
+    const interval = setInterval(fetchAndEvaluate, 3000); // 3 saniye High-Priority Thread
     return () => clearInterval(interval);
   }, [alerts, user]);
 
@@ -212,9 +222,13 @@ export default function NotificationSystem() {
                         <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-1">
                           {alert.symbol} Alarmı Tetiklendi
                         </h4>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
                           {alert.triggerMsg || `${alert.name} belirlediğiniz hedefe ulaştı.`}
                         </p>
+                        <Link href={`/?symbol=${alert.symbol}`} onClick={() => setIsOpen(false)} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-500 rounded-lg text-xs font-bold transition-colors">
+                          Terminale Git
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </Link>
                       </div>
                     </div>
                   </div>
