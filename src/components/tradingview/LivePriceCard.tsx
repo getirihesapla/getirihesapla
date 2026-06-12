@@ -113,12 +113,12 @@ export default function LivePriceCard({ asset, data }: LivePriceCardProps) {
             <span className={`h-1.5 w-1.5 rounded-full ${asset.type === 'crypto' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} title={asset.type === 'crypto' ? '7/24 Canlı Piyasa' : 'Piyasa Saatlerinde Canlı'}></span>
           </span>
         </div>
-        <div className={`text-sm font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm border transition-colors ${flash ? (flash === 'up' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white') : (isPositive ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'bg-rose-500/20 text-rose-400 border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.2)]')}`}>
+        <div className={`tabular-nums text-sm font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm border transition-colors ${flash ? (flash === 'up' ? 'bg-emerald-500 text-white' : 'bg-rose-500 text-white') : (isPositive ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]' : 'bg-rose-500/20 text-rose-400 border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.2)]')}`}>
           {isPositive ? '▲' : '▼'} {Math.abs(data.change).toFixed(2)}%
         </div>
       </div>
       
-      <div className={`text-3xl font-black mb-4 tracking-tight relative z-10 drop-shadow-md transition-colors duration-300 ${flashTextClass}`}>
+      <div className={`tabular-nums text-3xl font-black mb-4 tracking-tight relative z-10 drop-shadow-md transition-colors duration-300 ${flashTextClass}`}>
         {priceFormatted}
       </div>
       
