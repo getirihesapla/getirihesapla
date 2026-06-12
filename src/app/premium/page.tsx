@@ -201,7 +201,7 @@ export default function PremiumPage() {
                   <span>×</span> PDF Rapor Export Sistemi
                 </li>
                 <li className="flex items-start gap-3 text-sm text-slate-500 line-through">
-                  <span>×</span> AI Yatırım Asistanı
+
                 </li>
               </ul>
               <button disabled className="w-full py-4 rounded-xl font-bold text-slate-400 bg-slate-800 border border-slate-700 cursor-not-allowed">
@@ -232,7 +232,7 @@ export default function PremiumPage() {
                   <span className="text-amber-500">✓</span> Kapsamlı <b>PDF Rapor</b> Sistemi (Logolu)
                 </li>
                 <li className="flex items-start gap-3 text-sm text-slate-200">
-                  <span className="text-amber-500">✓</span> <b>AI Yatırım Asistanı</b> ile analiz
+
                 </li>
                 <li className="flex items-start gap-3 text-sm text-slate-200">
                   <span className="text-amber-500">✓</span> Reklamsız Premium Dashboard

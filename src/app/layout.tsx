@@ -47,7 +47,7 @@ import Sidebar from "@/components/layout/Sidebar";
 import LoadingScreen from "@/components/layout/LoadingScreen";
 import TVTicker from "@/components/tradingview/TVTicker";
 import { MobileMenuProvider } from "@/context/MobileMenuContext";
-import AIAssistant from "@/components/layout/AIAssistant";
+
 
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
@@ -106,7 +106,7 @@ export default function RootLayout({
                 <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950">
                   {children}
                 </main>
-                <AIAssistant />
+
               </div>
             </div>
             
