@@ -58,8 +58,18 @@ export default function RealMarketOverview() {
           </div>
           <span className="text-emerald-400 font-bold tracking-widest text-sm uppercase">Piyasalar Açık (Canlı Veri)</span>
         </div>
-        <div className="text-xs text-slate-500 font-medium">
-          Son Güncelleme: Anlık
+        <div className="flex items-center gap-4">
+          <div className="text-xs text-slate-500 font-medium">
+            Son Güncelleme: Anlık
+          </div>
+          <div className="group relative hidden sm:flex items-center cursor-help">
+            <span className="text-[10px] text-slate-600/80 hover:text-slate-400 transition-colors bg-slate-800/30 px-2 py-1 rounded-md border border-slate-700/30">
+              ℹ️ Veri Kaynağı: Korfu Küresel Veri Dağıtım Ağı
+            </span>
+            <div className="absolute right-0 top-full mt-2 w-64 p-2 bg-slate-800 border border-slate-700 rounded-lg text-[10px] text-slate-300 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              Veriler, küresel tezgah üstü (OTC) spot piyasalardan gecikmesiz olarak Korfu altyapısı tarafından işlenmektedir.
+            </div>
+          </div>
         </div>
       </div>
 

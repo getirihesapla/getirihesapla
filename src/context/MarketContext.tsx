@@ -67,39 +67,30 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    async function fetchCommodityData(asset: any) {
-      const tvSymbol = asset.id === "GOLD" ? "OANDA:XAUUSD" : "OANDA:XAGUSD";
-      const yahooSymbol = asset.symbol;
-      
+    async function fetchCommodityData() {
       try {
-        const res = await fetch('https://scanner.tradingview.com/global/scan', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            symbols: { tickers: [tvSymbol] },
-            columns: ['close', 'change', 'change_abs']
-          }),
-          cache: 'no-store'
-        });
-        if (res.ok) {
-           const data = await res.json();
-           const d = data.data[0]?.d;
-           if (d) {
-             const price = d[0];
-             const changePercent = d[1];
-             const history = Array.from({length: 24}, () => price + (Math.random() * price * 0.002 - price * 0.001));
-             return { price, change: changePercent, high: Math.max(...history), low: Math.min(...history), history, labels: Array.from({length: 24}, (_, i) => i.toString()) };
-           }
-        }
+        const res = await fetch(`/api/finance/commodity?t=${Date.now()}`);
+        if (!res.ok) return null;
+        const data = await res.json();
+        
+        const formatData = (d: any) => {
+           const price = d[0];
+           const changePercent = d[1];
+           const history = Array.from({length: 24}, () => price + (Math.random() * price * 0.002 - price * 0.001));
+           return { price, change: changePercent, high: Math.max(...history), low: Math.min(...history), history, labels: Array.from({length: 24}, (_, i) => i.toString()) };
+        };
+        
+        const goldRaw = data.find((x: any) => x.s === "OANDA:XAUUSD");
+        const silverRaw = data.find((x: any) => x.s === "OANDA:XAGUSD");
+        
+        return {
+           GOLD: goldRaw ? formatData(goldRaw.d) : null,
+           SILVER: silverRaw ? formatData(silverRaw.d) : null
+        };
       } catch (e) {
-        console.error("TV Scanner fetch error:", e);
+        console.error("Commodity API fetch error:", e);
+        return null;
       }
-      
-      console.warn("Falling back to Yahoo for", asset.id);
-      const yahooData = await fetchYahooData(yahooSymbol);
-      if (yahooData) return yahooData;
-      
-      return null;
     }
 
     async function fetchInitialCrypto(symbol: string) {
@@ -142,11 +133,15 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
         };
       };
 
+      const commodityRes = await fetchCommodityData();
+
       for (const asset of ASSETS) {
         let res = null;
         if (asset.type === "crypto") res = await fetchInitialCrypto(asset.symbol);
         if (asset.type === "yahoo") res = await fetchYahooData(asset.symbol);
-        if (asset.type === "commodity") res = await fetchCommodityData(asset);
+        if (asset.type === "commodity") {
+           res = commodityRes ? commodityRes[asset.id as 'GOLD'|'SILVER'] : null;
+        }
         
         if (!res) {
            let mockBasePrice = 100;
@@ -209,6 +204,8 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     const interval = setInterval(async () => {
+      const commodityRes = await fetchCommodityData();
+      
       for (const asset of ASSETS) {
         if (asset.type === "yahoo") {
           const res = await fetchYahooData(asset.symbol);
@@ -217,7 +214,7 @@ export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
           }
         }
         if (asset.type === "commodity") {
-          const res = await fetchCommodityData(asset);
+          const res = commodityRes ? commodityRes[asset.id as 'GOLD'|'SILVER'] : null;
           if (res && isMounted) {
             setDataMap((prev) => ({ ...prev, [asset.id]: res }));
           }
