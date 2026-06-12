@@ -20,6 +20,7 @@ interface Asset {
   avgPrice: number;
   currentPrice: number; // Stored initially, overwritten by live
   currency: string;
+  purchaseDate?: string;
   createdAt: any;
 }
 
@@ -74,7 +75,8 @@ export default function PortfolioPage() {
     amount: "",
     avgPrice: "",
     currentPrice: "",
-    currency: "TRY"
+    currency: "TRY",
+    purchaseDate: ""
   });
 
   // Search State
@@ -258,6 +260,7 @@ export default function PortfolioPage() {
           avgPrice: Number(formData.avgPrice),
           currentPrice: Number(formData.currentPrice),
           currency: formData.currency,
+          purchaseDate: formData.purchaseDate || null,
           createdAt: serverTimestamp()
         });
         
@@ -301,7 +304,7 @@ export default function PortfolioPage() {
   };
 
   const resetForm = () => {
-    setFormData({ symbol: "", name: "", type: "Hisse (BIST)", amount: "", avgPrice: "", currentPrice: "", currency: "TRY" });
+    setFormData({ symbol: "", name: "", type: "Hisse (BIST)", amount: "", avgPrice: "", currentPrice: "", currency: "TRY", purchaseDate: "" });
     setSearchQuery("");
   };
 
@@ -699,7 +702,7 @@ export default function PortfolioPage() {
                       <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Miktar</th>
                       <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Toplam Değer</th>
                       <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-right">Kâr/Zarar</th>
-                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-center">Trend</th>
+                      <th className="px-2 lg:px-3 py-3 font-semibold uppercase tracking-wider text-[10px] md:text-xs text-center">Alımdan Beri Gelişim</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/50">
@@ -711,8 +714,19 @@ export default function PortfolioPage() {
                         const isDailyPos = data.changePct >= 0;
                         
                         const profit = (data.price - asset.avgPrice) * asset.amount;
-                        const profitPct = ((data.price - asset.avgPrice) / asset.avgPrice) * 100;
+                        const profitPct = asset.avgPrice > 0 ? ((data.price - asset.avgPrice) / asset.avgPrice) * 100 : 0;
                         const isProfit = profit >= 0;
+
+                        let holdingDays = 0;
+                        let cagr = 0;
+                        if (asset.purchaseDate) {
+                          const pDate = new Date(asset.purchaseDate);
+                          const diffTime = Math.abs(new Date().getTime() - pDate.getTime());
+                          holdingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                          if (holdingDays > 30) {
+                            cagr = (((1 + (profitPct / 100)) ** (365 / holdingDays)) - 1) * 100;
+                          }
+                        }
 
                         return (
                           <tr key={asset.id} className="hover:bg-slate-800/30 transition-colors group">
@@ -756,12 +770,17 @@ export default function PortfolioPage() {
                               <div className={`font-bold font-mono text-xs md:text-sm ${isProfit ? 'text-emerald-400' : 'text-red-400'}`}>
                                 {isProfit ? '+' : ''}{formatCurrency(profit, asset.currency)}
                               </div>
-                              <div className={`text-[10px] md:text-xs ${isProfit ? 'text-emerald-500/70' : 'text-red-500/70'}`}>
+                              <div className={`text-[10px] md:text-xs ${isProfit ? 'text-emerald-500/70' : 'text-red-500/70'} mb-1`}>
                                 {isProfit ? '▲' : '▼'} {profitPct.toFixed(2)}%
                               </div>
+                              {holdingDays > 0 && (
+                                <div className="text-[9px] text-slate-500 font-medium">
+                                  {holdingDays} Gün • {holdingDays > 30 ? `Yıllık: ${cagr >= 0 ? '+' : ''}${cagr.toFixed(2)}%` : 'Kısa Vade'}
+                                </div>
+                              )}
                             </td>
                             <td className="px-2 lg:px-3 py-3 flex justify-center">
-                              <Sparkline isPositive={isDailyPos} />
+                              <Sparkline isPositive={isProfit} />
                             </td>
                           </tr>
                         );
@@ -945,14 +964,20 @@ export default function PortfolioPage() {
                 </div>
 
                 {modalType === "asset" && (
-                  <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Miktar</label>
-                      <input required type="number" step="any" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-mono focus:outline-none focus:border-amber-500" placeholder="0.00" />
+                  <div className="bg-slate-950/50 p-4 rounded-xl border border-slate-800 flex flex-col gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Miktar</label>
+                        <input required type="number" step="any" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-mono focus:outline-none focus:border-amber-500" placeholder="0.00" />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ort. Maliyet</label>
+                        <input required type="number" step="any" value={formData.avgPrice} onChange={e => setFormData({...formData, avgPrice: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-mono focus:outline-none focus:border-amber-500" placeholder="0.00" />
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Ort. Maliyet</label>
-                      <input required type="number" step="any" value={formData.avgPrice} onChange={e => setFormData({...formData, avgPrice: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-white font-mono focus:outline-none focus:border-amber-500" placeholder="0.00" />
+                      <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Alım Tarihi</label>
+                      <input type="date" value={formData.purchaseDate} onChange={e => setFormData({...formData, purchaseDate: e.target.value})} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2 px-3 text-slate-400 font-mono focus:outline-none focus:border-amber-500 [color-scheme:dark]" />
                     </div>
                   </div>
                 )}
