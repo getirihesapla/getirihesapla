@@ -72,17 +72,24 @@ export default function RootLayout({
                 }
               } catch (_) {}
               
-              // Inline Service Worker for PWA Install Prompt
+              // Kökten Çözüm: Eski PWA ve Cache kalıntılarını tüm cihazlarda zorla temizle
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (let name of names) {
+                    caches.delete(name);
+                  }
+                });
+              }
               if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  const swCode = "self.addEventListener('install', (e) => { self.skipWaiting(); }); self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); }); self.addEventListener('fetch', (e) => {});";
-                  const blob = new Blob([swCode], { type: 'application/javascript' });
-                  const swUrl = URL.createObjectURL(blob);
-                  navigator.serviceWorker.register(swUrl).then(function() {
-                    console.log('Inline Service Worker registered successfully for PWA.');
-                  }).catch(function(err) {
-                    console.error('Service Worker registration failed:', err);
-                  });
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                  let hasUpdates = false;
+                  for (let registration of registrations) {
+                    registration.unregister();
+                    hasUpdates = true;
+                  }
+                  if (hasUpdates) {
+                    window.location.reload(true);
+                  }
                 });
               }
             `,
